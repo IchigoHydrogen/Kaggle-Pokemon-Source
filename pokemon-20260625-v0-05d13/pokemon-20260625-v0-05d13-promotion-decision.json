@@ -1,0 +1,18 @@
+{
+  "version": "pokemon-20260625-v0-05d13",
+  "decision": "exploration_promote",
+  "winner_margin": 0.1115,
+  "n_winner": 610,
+  "n_loser": 584,
+  "holdout_hit_rate": 0.518,
+  "correct_on_hits": 0.5946,
+  "table_entries": 30,
+  "phase": {
+    "early": 0.1157,
+    "mid": 0.1047,
+    "late": 0.1159,
+    "all": 0.1115
+  },
+  "key_finding": "step_frac<=2/3 filter removes noisy late-game decisions. T*2/3 is significantly better than T*1/2 (+0.013). Confirms late-game (step>0.67) adds noise.",
+  "next": "v05d14: step_frac<=0.75 (T*3/4) to test if trend continues or T*2/3 is optimal"
+}
