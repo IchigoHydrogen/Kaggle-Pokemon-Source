@@ -206,8 +206,10 @@ def detect_opponent_archetype(op_all_pokemon, stadium_id: int = 0) -> tuple[str,
 
 
 # v0-05d1 UNKNOWN_0 policy-table assist, distilled from offline PyTorch MLP.
+# v0-05d11: use abstract option signature (generalizes across card-IDs/decks)
+USE_ABSTRACT_OPTION_SIGNATURE = True
 USE_UNKNOWN0_POLICY_TABLE = True
-UNKNOWN0_POLICY_TABLE = {'12|13|14||safe||ko||late': '13', '12|13|14||safe||ko||mid': '13', '12|13|14||safe||no_ko||late': '13', '12|13|14||safe||no_ko||mid': '13', '12|13|14|END||safe||ko||late': 'END', '12|13|14|END||safe||ko||mid': 'END', '12|13|14|END||safe||no_ko||late': 'END', '12|13|14|END||safe||no_ko||mid': 'END', '12|13|14|END|NO||safe||ko||mid': 'END', '12|13|14|END|NO||safe||no_ko||mid': 'END', '12|13|14|END|NO|YES||safe||ko||late': 'END', '12|13|14|END|NO|YES||safe||ko||mid': 'END', '12|13|14|END|NO|YES||safe||no_ko||late': 'END', '12|13|14|END|NUMBER||safe||ko||late': 'END', '12|13|14|END|NUMBER||safe||ko||mid': 'END', '12|13|14|END|YES||safe||ko||mid': 'END', '12|13|14|END|YES||safe||no_ko||late': 'END', '14|END||safe||ko||early': 'END', '14|END||safe||ko||late': 'END', '14|END||safe||ko||mid': 'END', '14|END|NO||safe||ko||late': 'END', '14|END|NO||safe||ko||mid': 'END', '14|END|NO||safe||no_ko||late': 'END', '14|END|NO||safe||no_ko||mid': 'END', '14|END|NO|YES||safe||ko||late': 'END', '14|END|NO|YES||safe||ko||mid': 'END', '14|END|NO|YES||safe||no_ko||late': 'END', '14|END|NO|YES||safe||no_ko||mid': 'END', '14|END|NUMBER||safe||ko||late': 'END', '14|END|NUMBER||safe||ko||mid': 'END', '14|END|NUMBER|YES||safe||ko||mid': 'END', '14|END|YES||safe||ko||early': 'YES', '14|END|YES||safe||ko||late': 'END', '14|END|YES||safe||ko||mid': 'END', '12|13|14||*||*||*': '13', '12|13|14|END||*||*||*': 'END', '12|13|14|END|NO||*||*||*': 'END', '12|13|14|END|NO|YES||*||*||*': 'END', '12|13|14|END|NUMBER||*||*||*': 'END', '12|13|14|END|YES||*||*||*': 'END', '14|END||*||*||*': 'END', '14|END|NO|YES||*||*||*': 'END', '14|END|YES||*||*||*': 'END'}
+UNKNOWN0_POLICY_TABLE = {'END|N1||safe||ko||early': 'END', 'END|N1||safe||ko||late': 'END', 'END|N1||safe||ko||mid': 'END', 'END|N1|NO||safe||ko||late': 'END', 'END|N1|NO||safe||ko||mid': 'END', 'END|N1|NO|YES||safe||ko||late': 'END', 'END|N1|NO|YES||safe||ko||mid': 'END', 'END|N1|NO|YES||safe||no_ko||late': 'END', 'END|N1|NO|YES||safe||no_ko||mid': 'END', 'END|N1|NUMBER||safe||ko||late': 'END', 'END|N1|NUMBER||safe||ko||mid': 'END', 'END|N1|NUMBER|YES||safe||ko||mid': 'END', 'END|N1|YES||safe||ko||early': 'YES', 'END|N1|YES||safe||ko||late': 'END', 'END|N1|YES||safe||ko||mid': 'END', 'END|N1|YES||safe||no_ko||late': 'END', 'END|N3p||safe||ko||late': 'END', 'END|N3p||safe||ko||mid': 'END', 'END|N3p||safe||no_ko||late': 'END', 'END|N3p||safe||no_ko||mid': 'END', 'END|N3p|NO||safe||ko||mid': 'END', 'END|N3p|NO||safe||no_ko||late': 'END', 'END|N3p|NO||safe||no_ko||mid': 'END', 'END|N3p|NO|YES||safe||ko||late': 'END', 'END|N3p|NO|YES||safe||ko||mid': 'END', 'END|N3p|NO|YES||safe||no_ko||late': 'END', 'END|N3p|NUMBER||safe||ko||late': 'END', 'END|N3p|NUMBER||safe||ko||mid': 'END', 'END|N3p|NUMBER|YES||risk||ko||late': 'END', 'END|N3p|YES||safe||ko||mid': 'END', 'END|N3p|YES||safe||no_ko||late': 'END', 'N3p||safe||ko||late': '13', 'N3p||safe||ko||mid': '13', 'N3p||safe||no_ko||late': '13', 'N3p||safe||no_ko||mid': '13', 'END|N1||*||*||*': 'END', 'END|N1|NO|YES||*||*||*': 'END', 'END|N1|YES||*||*||*': 'END', 'END|N3p||*||*||*': 'END', 'END|N3p|NO||*||*||*': 'END', 'END|N3p|NO|YES||*||*||*': 'END', 'END|N3p|NUMBER||*||*||*': 'END', 'END|N3p|YES||*||*||*': 'END', 'N3p||*||*||*': '13'}
 UNKNOWN0_POLICY_STATS = {
     "calls": 0, "unknown0_context": 0, "eligible": 0,
     "key_hit": 0, "signature_fallback_hit": 0, "miss": 0,
@@ -309,6 +311,30 @@ def _unknown0_policy_signature_forms(select):
     return forms
 
 
+def _unknown0_policy_abstract_sig(select):
+    # v0-05d11: abstract signature matching training data format.
+    # Uses canonical id per option: numeric value for action options, name for keyword options.
+    KEYWORDS = {"END", "YES", "NO", "NUMBER"}
+    per_option = [_unknown0_policy_option_type_identifiers(o) for o in select.option]
+    canonical = set()
+    for ids in per_option:
+        nums = sorted([x for x in ids if x.lstrip("-").isdigit()])
+        if nums:
+            canonical.add(nums[0])
+        else:
+            names = sorted([x for x in ids if x.isalpha()])
+            if names:
+                canonical.add(names[0].upper())
+    keywords_found = canonical & KEYWORDS
+    n_numeric = len([t for t in canonical if t.lstrip("-").isdigit()])
+    n_bucket = "N" + ("0" if n_numeric == 0 else "1" if n_numeric == 1 else "2" if n_numeric == 2 else "3p")
+    parts = [n_bucket]
+    for kw in ["END", "YES", "NO", "NUMBER"]:
+        if kw in keywords_found:
+            parts.append(kw)
+    return "|".join(sorted(parts))
+
+
 def _unknown0_policy_select(select, scores, context, turn, deckout_risk_strict, deckout_risk, can_win_this_turn, target_can_kill, desc_indices):
     _unknown0_policy_stat_inc("calls")
     if not USE_UNKNOWN0_POLICY_TABLE or not _unknown0_policy_is_context(context):
@@ -320,28 +346,41 @@ def _unknown0_policy_select(select, scores, context, turn, deckout_risk_strict, 
     except Exception:
         return None
     _unknown0_policy_stat_inc("eligible")
-    sig_forms = _unknown0_policy_signature_forms(select)
     deck_bucket = "strict" if deckout_risk_strict else "risk" if deckout_risk else "safe"
     ko_bucket = "ko" if (target_can_kill or can_win_this_turn) else "no_ko"
     turn_bucket = "early" if int(turn) <= 2 else "mid" if int(turn) <= 5 else "late"
     preferred = None
     hit_key = None
     signature_fallback = False
-    for sig in sorted(sig_forms):
-        keys = [
+    if USE_ABSTRACT_OPTION_SIGNATURE:
+        sig = _unknown0_policy_abstract_sig(select)
+        for k in [
             f"{sig}||{deck_bucket}||{ko_bucket}||{turn_bucket}",
             f"{sig}||{deck_bucket}||{ko_bucket}||*",
             f"{sig}||{deck_bucket}||*||*",
             f"{sig}||*||*||*",
-        ]
-        for k in keys:
+        ]:
             if k in UNKNOWN0_POLICY_TABLE:
                 preferred = UNKNOWN0_POLICY_TABLE[k]
                 hit_key = k
                 signature_fallback = k.endswith("||*||*||*")
                 break
-        if preferred is not None:
-            break
+    else:
+        sig_forms = _unknown0_policy_signature_forms(select)
+        for sig in sorted(sig_forms):
+            for k in [
+                f"{sig}||{deck_bucket}||{ko_bucket}||{turn_bucket}",
+                f"{sig}||{deck_bucket}||{ko_bucket}||*",
+                f"{sig}||{deck_bucket}||*||*",
+                f"{sig}||*||*||*",
+            ]:
+                if k in UNKNOWN0_POLICY_TABLE:
+                    preferred = UNKNOWN0_POLICY_TABLE[k]
+                    hit_key = k
+                    signature_fallback = k.endswith("||*||*||*")
+                    break
+            if preferred is not None:
+                break
     if preferred is None:
         _unknown0_policy_stat_inc("miss")
         return None

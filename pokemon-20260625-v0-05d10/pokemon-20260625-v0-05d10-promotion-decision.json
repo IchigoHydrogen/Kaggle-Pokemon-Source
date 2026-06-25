@@ -1,0 +1,65 @@
+{
+  "version": "pokemon-20260625-v0-05d10",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "machine": "ei",
+  "experiment_type": "aggressive",
+  "development_track": "exploration_track",
+  "winner_margin_summary": {
+    "v05d10_overall": {
+      "winner_margin": 0.0852,
+      "winner_top1": 0.6406,
+      "loser_top1": 0.5554,
+      "n_winner": 754,
+      "n_loser": 704
+    },
+    "baseline_v05d9": {
+      "winner_margin": 0.0841
+    },
+    "baseline_v05d7": {
+      "winner_margin": 0.081
+    },
+    "improvement_over_v05d9": 0.0011
+  },
+  "phase_stratified": {
+    "early": 0.1028,
+    "mid": 0.0802,
+    "late": 0.0766,
+    "all": 0.0852
+  },
+  "holdout_summary": {
+    "hit_rate": 0.6325,
+    "correct_on_hits": 0.5995,
+    "table_entries": 44
+  },
+  "abstract_signatures": [
+    "END|N1",
+    "END|N1|NO",
+    "END|N1|NO|YES",
+    "END|N1|NUMBER",
+    "END|N1|NUMBER|YES",
+    "END|N1|YES",
+    "END|N3p",
+    "END|N3p|NO",
+    "END|N3p|NO|NUMBER|YES",
+    "END|N3p|NO|YES",
+    "END|N3p|NUMBER",
+    "END|N3p|NUMBER|YES",
+    "END|N3p|YES",
+    "N3p"
+  ],
+  "bugs_found": [
+    "RUN_PREFIX used os.environ.get with wrong default (v05d9) -> artifacts went to v05d9 dir. Fixed for v05d11 by hardcoding.",
+    "main.py _unknown0_policy_abstract_sig() counted keyword options enum integer value as numeric -> key mismatch. Fixed for v05d11."
+  ],
+  "live_hit_rate": {
+    "value": 0.0,
+    "valid": false,
+    "reason": "measurement broken due to RUN_PREFIX bug + abstract sig mismatch in runtime"
+  },
+  "next_candidates": [
+    "v0-05d11 [conservative]: fix abstract sig runtime match + early-game filter (step<=T/3 only for policy table fitting)",
+    "v0-05d12 [aggressive]: TO_BENCH context policy table (n=311, winner_margin=+0.016)",
+    "v0-05d13 [conservative]: combine best abstract key + early-game + TO_BENCH if d11/d12 succeed"
+  ]
+}
