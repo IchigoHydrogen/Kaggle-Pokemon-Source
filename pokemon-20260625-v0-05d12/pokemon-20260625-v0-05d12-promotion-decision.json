@@ -1,0 +1,44 @@
+{
+  "version": "pokemon-20260625-v0-05d12",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "winner_margin_summary": {
+    "v05d12_overall": {
+      "winner_margin": 0.0982,
+      "winner_top1": 0.6321,
+      "loser_top1": 0.534,
+      "n_winner": 299,
+      "n_loser": 324
+    },
+    "baseline_v05d10": 0.0852,
+    "baseline_v05d11": 0.0958,
+    "improvement_over_v05d10": 0.013,
+    "improvement_over_v05d11": 0.0024,
+    "confidence": "medium (n~300 per side, better than v05d11 n~100)"
+  },
+  "phase_stratified": {
+    "early": 0.0706,
+    "mid": 0.1222,
+    "late": 0.1247,
+    "all": 0.0982
+  },
+  "holdout_summary": {
+    "hit_rate": 0.2703,
+    "correct_on_hits": 0.5811,
+    "table_entries": 15
+  },
+  "smoke_test": {
+    "status": "PASS",
+    "wins": 12,
+    "games": 12,
+    "errors": 0,
+    "note": "KEYWORDS bug fixed"
+  },
+  "live_hit_rate": {
+    "value": 0.0,
+    "valid": false,
+    "reason": "UNKNOWN_0 context did not appear in 12 vs-rule_only smoke games"
+  },
+  "key_finding": "Mid-late phase has highest margin (0.12) when training on first-half. T/2 filter captures diversity while removing late-game noise.",
+  "next": "v05d13: step_fraction <= 0.67 (T*2/3) to complete cutoff sweep, then v05d14 with TO_BENCH context or mid-game-only filter"
+}

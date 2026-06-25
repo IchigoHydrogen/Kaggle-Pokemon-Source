@@ -208,7 +208,7 @@ def detect_opponent_archetype(op_all_pokemon, stadium_id: int = 0) -> tuple[str,
 # v0-05d1 UNKNOWN_0 policy-table assist, distilled from offline PyTorch MLP.
 USE_ABSTRACT_OPTION_SIGNATURE = True
 USE_UNKNOWN0_POLICY_TABLE = True
-UNKNOWN0_POLICY_TABLE = {'END|N1||safe||ko||early': 'END', 'END|N1||safe||ko||mid': 'END', 'END|N1|YES||safe||ko||early': 'YES', 'END|N1|YES||safe||ko||mid': 'END', 'END|N3p||safe||ko||mid': 'END'}
+UNKNOWN0_POLICY_TABLE = {'END|N1||safe||ko||early': 'END', 'END|N1||safe||ko||mid': 'END', 'END|N1|NO|YES||safe||ko||late': 'END', 'END|N1|NO|YES||safe||ko||mid': 'END', 'END|N1|NO|YES||safe||no_ko||mid': 'END', 'END|N1|YES||safe||ko||early': 'YES', 'END|N1|YES||safe||ko||mid': 'END', 'END|N3p||safe||ko||late': 'END', 'END|N3p||safe||ko||mid': 'END', 'END|N3p||safe||no_ko||mid': 'END', 'END|N3p|NO||safe||ko||mid': 'END', 'END|N3p|NO||safe||no_ko||mid': 'END', 'END|N1||*||*||*': 'END', 'END|N1|NO|YES||*||*||*': 'END', 'END|N3p||*||*||*': 'END'}
 UNKNOWN0_POLICY_STATS = {
     "calls": 0, "unknown0_context": 0, "eligible": 0,
     "key_hit": 0, "signature_fallback_hit": 0, "miss": 0,
@@ -311,7 +311,7 @@ def _unknown0_policy_signature_forms(select):
 
 
 def _unknown0_policy_abstract_sig(select):
-    KEYWORDS = ('END', 'YES', 'NO', 'NUMBER')
+    KEYWORDS = set(["END", "YES", "NO", "NUMBER"])
     per_option = [_unknown0_policy_option_type_identifiers(o) for o in select.option]
     canonical = set()
     for ids in per_option:

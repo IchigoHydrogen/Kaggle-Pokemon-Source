@@ -1,0 +1,40 @@
+{
+  "status": "ok",
+  "gamma": 0.98,
+  "use_mc_weights": true,
+  "baseline_v05d7": 0.081,
+  "phases": {
+    "early": {
+      "n_winner": 140,
+      "n_loser": 153,
+      "winner_top1": 0.6,
+      "loser_top1": 0.5294117647058824,
+      "winner_margin": 0.070588,
+      "low_confidence": false
+    },
+    "mid": {
+      "n_winner": 103,
+      "n_loser": 106,
+      "winner_top1": 0.6504854368932039,
+      "loser_top1": 0.5283018867924528,
+      "winner_margin": 0.122184,
+      "low_confidence": false
+    },
+    "late": {
+      "n_winner": 56,
+      "n_loser": 65,
+      "winner_top1": 0.6785714285714286,
+      "loser_top1": 0.5538461538461539,
+      "winner_margin": 0.124725,
+      "low_confidence": true
+    },
+    "all": {
+      "n_winner": 299,
+      "n_loser": 324,
+      "winner_top1": 0.6321070234113713,
+      "loser_top1": 0.5339506172839507,
+      "winner_margin": 0.098156,
+      "low_confidence": false
+    }
+  }
+}
