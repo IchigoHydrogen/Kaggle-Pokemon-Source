@@ -1,0 +1,56 @@
+{
+  "version": "pokemon-20260625-v0-05d8",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "machine": "ei",
+  "experiment_type": "aggressive",
+  "development_track": "exploration_track",
+  "runtime_mode": "table_or_numpy_policy",
+  "fresh_training": true,
+  "hard_gates": "pass",
+  "hard_gate_detail": {
+    "notebook_executed": true,
+    "main_py_compiles": true,
+    "archive_has_pycache": false,
+    "error_count": 0,
+    "policy_table_entries": 44
+  },
+  "winner_margin_summary": {
+    "unknown0_policy_table": {
+      "winner_margin": 0.086,
+      "winner_top1": 0.641,
+      "loser_top1": 0.555,
+      "note": "v05d7 比 +0.005 — 回帰なし"
+    },
+    "mlp_main": {
+      "winner_margin": null,
+      "n_winner": 0,
+      "n_loser": 2,
+      "note": "MAIN holdout サンプル皆無 — 計測不能"
+    },
+    "mlp_to_bench": {
+      "winner_margin": 0.016,
+      "winner_top1": 0.631,
+      "loser_top1": 0.615,
+      "n_winner": 176,
+      "n_loser": 135,
+      "note": "唯一 n>=100 かつ正の margin を持つ非-UNKNOWN_0 コンテキスト"
+    }
+  },
+  "exploration_evidence": {
+    "mlp_context_coverage_discovered": true,
+    "main_context_finding": "MAIN の 74.7% は 1-option (17375/23269 決定) → MLP がランク学習できない。MLP 訓練データ内の MAIN は 54 行のみ (全体 112288 行の 0.05%)。",
+    "mlp_specialization": "MLP の 89% が UNKNOWN_0 (100004/112288 行)。事実上 UNKNOWN_0 専用モデル。",
+    "to_bench_signal": "TO_BENCH のみが n>=100 かつ winner_margin=+0.016 の正シグナルを保有。",
+    "main_submission_impact": "alpha=0.1 で MAIN に MLP 適用したが訓練データ 54 行 → ほぼランダム予測の 10% 混入 = 軽微なノイズ"
+  },
+  "known_risks": [
+    "MAIN への MLP 適用は実質ノイズ (submission に組まれたが影響は軽微)",
+    "MLP は UNKNOWN_0 専門化しており汎用ランカーではなかった"
+  ],
+  "next_candidates": [
+    "v0-05d9-a: MLP_SUBMISSION_CONTEXTS=['TO_BENCH'] に切り替え — 唯一の正シグナルコンテキスト",
+    "v0-05d9-b: UNKNOWN_0 policy_table + MLP の組み合わせ検討 (policy_table のカバレッジ外を MLP で補う)",
+    "v0-05d9-c: MAIN の multi-option 決定 (~5895件) に特化した小モデルを別途訓練"
+  ]
+}
