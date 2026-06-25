@@ -1,0 +1,55 @@
+{
+  "version": "pokemon-20260625-v0-05d11",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "experiment_type": "aggressive",
+  "winner_margin_summary": {
+    "v05d11_overall": {
+      "winner_margin": 0.0958,
+      "winner_top1": 0.6449,
+      "loser_top1": 0.549,
+      "n_winner": 107,
+      "n_loser": 102
+    },
+    "low_confidence": true,
+    "reason": "n < 200 in both winner and loser",
+    "baseline_v05d10": {
+      "winner_margin": 0.0852
+    },
+    "baseline_v05d7": {
+      "winner_margin": 0.081
+    },
+    "improvement_over_v05d10": 0.0106
+  },
+  "phase_stratified": {
+    "early": 0.0581,
+    "mid": 0.2778,
+    "all": 0.0958
+  },
+  "holdout_summary": {
+    "hit_rate": 0.0907,
+    "correct_on_hits": 0.5981,
+    "table_entries": 5
+  },
+  "policy_table": [
+    "END|N1||safe||ko||early->END",
+    "END|N1||safe||ko||mid->END",
+    "END|N1|YES||safe||ko||early->YES",
+    "END|N1|YES||safe||ko||mid->END",
+    "END|N3p||safe||ko||mid->END"
+  ],
+  "smoke_test": {
+    "status": "FAILED",
+    "error": "TypeError: unsupported operand type(s) for &: set and tuple",
+    "root_cause": "KEYWORDS={...} set literal inside helper f-string evaluates as tuple"
+  },
+  "live_hit_rate": {
+    "value": null,
+    "valid": false,
+    "reason": "smoke test failed due to set-literal bug in helper f-string"
+  },
+  "bugs_found": [
+    "KEYWORDS = {\"END\",\"YES\"...} inside helper f-string evaluates as tuple not set -> & operator fails. Fix: use {{...}} double braces in helper string or set([...]) constructor."
+  ],
+  "next": "v0-05d12: fix set-literal bug + early-game filter T/2 (step<=0.5) for more coverage"
+}
