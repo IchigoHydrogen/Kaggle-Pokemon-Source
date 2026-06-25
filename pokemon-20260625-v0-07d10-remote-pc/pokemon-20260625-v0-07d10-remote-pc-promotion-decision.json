@@ -1,0 +1,84 @@
+{
+  "version": "pokemon-20260625-v0-07d10-remote-pc",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "reason": "Bug 1 (live_features 97-dim) FIXED: n_valid_games=200/iter, n_main_decisions~9500/iter. RL training ran 50 iters (42.7 min). winner_margin_inference improved from IL baseline -0.0059 to final -0.000044 (+0.0059 improvement). Peak at iter40: +0.0096 (exceeds research baseline +0.0059). Hard gate FAIL: Part B still fails — Cell[25] extracts a tar.gz and loads main_option_scorer.pt (96-dim) into _V06D15MainScorer(Linear(97,512)) → size mismatch. Fix: after saving 96-dim RL model, re-save as 97-dim by zero-padding net.0.weight[:,96] column (dim96 input gets zero weight, functionally equivalent to 96-dim). Also: final iter49 margin (-0.000044) is below peak iter40 margin (+0.0096) — need best-checkpoint saving.",
+  "machine": "remote-pc",
+  "experiment_type": "aggressive",
+  "consecutive_conservative_count": 0,
+  "development_track": "exploration_track",
+  "runtime_mode": "guarded_torch_policy",
+  "fresh_training": true,
+  "artifact_reuse": "v06d18 IL weights (truncated [:,:96]); v06d18 feature matrix ([:,:96] sliced)",
+  "hard_gates": "fail",
+  "smoke_gate_ok": false,
+  "runtime_baseline": {
+    "holdout_model_top1": 0.509,
+    "runtime_mode": "guarded_torch_policy"
+  },
+  "research_baseline": {
+    "winner_margin_inference": 0.0059,
+    "source": "v07d7-remote-pc"
+  },
+  "winner_margin_summary": {
+    "holdout_winner_top1_stored": 0.5125,
+    "holdout_loser_top1_stored": 0.5126,
+    "holdout_winner_margin_stored": -4.41e-05,
+    "holdout_winner_top1_inference": 0.5125,
+    "holdout_loser_top1_inference": 0.5126,
+    "holdout_winner_margin_inference": -4.41e-05,
+    "il_baseline_winner_margin_96dim": -0.0059,
+    "peak_iter_margin": 0.0096,
+    "peak_iter": 40,
+    "improvement_from_il_baseline": "+0.0059 (final model)",
+    "improvement_from_il_baseline_peak": "+0.0155 (iter 40 model)",
+    "comparison_to_research_baseline_final": "-0.0064 below +0.0059",
+    "comparison_to_research_baseline_peak": "+0.0037 ABOVE research baseline",
+    "note": "dim96 removal confirmed working. RL improved from -0.0059 to ~0. Peak iter40 exceeded research baseline. Final model below peak due to no best-checkpoint saving."
+  },
+  "holdout_summary": {
+    "model_top1": 0.5125,
+    "decisions": 956
+  },
+  "training_summary": {
+    "rl_algo": "online PPO (PPO clip=0.2, lambda_il=0.5, lambda_rl=0.05)",
+    "rl_iters": 50,
+    "games_per_iter": 200,
+    "n_valid_games_per_iter": 200,
+    "n_main_decisions_per_iter": "~9500 avg",
+    "elapsed_s": 2561.4,
+    "elapsed_min": 42.7,
+    "pre_rl_win_rate": 0.28,
+    "post_rl_win_rate": 0.25,
+    "feat_dim": 96,
+    "lambda_il": 0.5,
+    "lambda_rl": 0.05,
+    "iter_margin_trajectory": {
+      "0": -0.0059,
+      "10": -0.0059,
+      "20": -0.0112,
+      "30": -0.0077,
+      "40": 0.0096,
+      "49": -4.41e-05
+    },
+    "entropy_start": 1.26,
+    "entropy_end": 0.95,
+    "il_loss_start": 1.61,
+    "il_loss_end": 1.36
+  },
+  "bugs_found": {
+    "part_b_still_fails": "Cell[25] extracts submission tar.gz. main.py in the archive uses _V06D15MainScorer(Linear(97,512)). 96-dim RL model cannot load. My Cell[23] main.py file patch does NOT affect the tar.gz content because Cell[25] rebuilds the archive from OUTPUT_DIR/main.py injected with guard code. The _V06D15MainScorer class is in the guard injection code (_GUARD_INJECTION), NOT in main.py — so patching main.py is insufficient.",
+    "best_checkpoint_missing": "Final model (iter 49, wm=-4.4e-05) is worse than best checkpoint (iter 40, wm=+0.0096). No checkpoint saving logic exists. v07d11 must add best-checkpoint tracking.",
+    "mainpy_patch_redundant": "Cell[23] main.py patch was harmless but ineffective. The _V06D15MainScorer class comes from _GUARD_INJECTION in Cell[25], not main.py. Remove the patch."
+  },
+  "exploration_summary": "dim96 removal with online PPO is working. RL can achieve positive winner_margin (peak +0.0096). Two issues prevent a `learning_promote`: (1) Part B size mismatch (fix: save 97-dim padded model); (2) no best-checkpoint saving (fix: track best margin and restore before final eval). v07d11 should address both.",
+  "known_risks": [
+    "Peak iter40 margin (+0.0096) is an eval on the same holdout set used for monitoring — may be overfit if measured too frequently",
+    "97-dim padded model for Part B: dim96 input receives zero weight at inference → functionally 96-dim, but different from 96-dim model at training time",
+    "Win rate dropped pre→post (0.28→0.25) suggesting the game-win metric and winner_margin metric are not fully aligned"
+  ],
+  "next_candidates": [
+    "[aggressive] v07d11: fix Part B (save 97-dim zero-padded model after RL training) + add best-checkpoint saving. Same dim96 removal + online PPO lambda_il=0.5 setup. Expected: iter40-equivalent model (~+0.0096) with Part B passing.",
+    "[conservative] v07d11-alt: revert to 97-dim (set dim96 weight to 0 at init) — avoids architecture change, keeps Part B working"
+  ]
+}
