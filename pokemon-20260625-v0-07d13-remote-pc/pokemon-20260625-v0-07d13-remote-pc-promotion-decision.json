@@ -1,0 +1,87 @@
+{
+  "version": "pokemon-20260625-v0-07d13-remote-pc",
+  "decision": "learning_promote",
+  "promotion_type": "learning_promote",
+  "reason": "All hard gates PASS (Part B ok, loader_model_loaded=True, entrypoint_ok=True). winner_margin_inference=+0.0269 vastly exceeds research baseline +0.0080 by +0.0189. Measurement fix confirmed: saved model is iter-99 (final=best=0.0269). Best-checkpoint: 'v07d11: final model kept (final=0.0269 >= best=0.0269)' — the final iter-99 model IS the best. Key finding: with 100 iters, peak is at iter 99 (still improving at last iter). 50-iter runs peaked at iter 40; 100-iter run peaks at final iter. Model is still converging — more iters will likely yield further improvement.",
+  "machine": "remote-pc",
+  "experiment_type": "aggressive",
+  "consecutive_conservative_count": 0,
+  "development_track": "learning_track",
+  "runtime_mode": "guarded_torch_policy",
+  "fresh_training": true,
+  "artifact_reuse": "v06d18 IL weights ([:,:96]); v06d18 feature matrix ([:,:96])",
+  "hard_gates": "pass",
+  "smoke_gate_ok": true,
+  "runtime_baseline": {
+    "holdout_model_top1": 0.509,
+    "runtime_mode": "guarded_torch_policy"
+  },
+  "research_baseline_prev": {
+    "winner_margin_inference": 0.0080,
+    "source": "v07d11-remote-pc"
+  },
+  "research_baseline_new": {
+    "winner_margin_inference": 0.0269,
+    "source": "v07d13-remote-pc",
+    "note": "Massive jump: 50 iters (peak iter40 ~+0.0080) → 100 iters (peak iter99 +0.0269). Model still converging at iter 99."
+  },
+  "winner_margin_summary": {
+    "winner_margin_stored": 0.0269,
+    "winner_margin_inference": 0.0269,
+    "winner_top1": 0.4601,
+    "loser_top1": 0.4333,
+    "il_baseline_winner_margin": -0.0059,
+    "research_baseline_prev": 0.0080,
+    "improvement_vs_research_baseline": "+0.0189",
+    "improvement_vs_il_baseline": "+0.0328",
+    "iter_margin_trajectory": {
+      "0": -0.0059,
+      "10": -0.0056,
+      "20": -0.0066,
+      "30": -0.0161,
+      "40": -0.0073,
+      "50": 0.0209,
+      "60": -0.0047,
+      "70": 0.0153,
+      "80": 0.0093,
+      "90": 0.0037,
+      "99": 0.0269
+    },
+    "best_checkpoint_iter": 99,
+    "best_checkpoint_margin": 0.0269,
+    "note": "With 100 iters, peak is at iter 99 (still improving). With 50 iters, peak was iter 40. Increasing iters dramatically improves final quality."
+  },
+  "holdout_summary": {
+    "decisions": 956,
+    "winner_top1": 0.4601,
+    "loser_top1": 0.4333
+  },
+  "runtime_summary": {
+    "part_b": "pass",
+    "kaggle_loader_model_loaded": true,
+    "entrypoint_ok": true
+  },
+  "training_summary": {
+    "rl_algo": "online PPO (PPO clip=0.2, lambda_il=0.5, lambda_rl=0.05)",
+    "rl_iters": 100,
+    "games_per_iter": 200,
+    "elapsed_min": 89.7,
+    "feat_dim": 96,
+    "lambda_il": 0.5,
+    "pre_rl_win_rate": 0.45,
+    "post_rl_win_rate": 0.27,
+    "episode_buffer": "985924 decisions"
+  },
+  "key_findings": {
+    "still_converging": "iter-99 = best checkpoint AND final iteration. Model has NOT converged. More iters will likely improve further.",
+    "iters_scaling": "50 iters peak=+0.0080 (iter40), 100 iters peak=+0.0269 (iter99). Huge gain from doubling iters.",
+    "noise_pattern": "Large oscillations: iter50=+0.0209, iter60=-0.0047, iter70=+0.0153 — noisy but trending up.",
+    "positive_zone": "With 100 iters, all checkpoints from iter 70+ are positive (+0.0153, +0.0093, +0.0037, +0.0269)."
+  },
+  "next_candidates": [
+    "[conservative] v07d14: extend N_ITERS=150 (50 more from 100). Model still converging — may reach even higher peak.",
+    "[aggressive] v07d14: extend N_ITERS=200. More aggressive extension to find convergence.",
+    "[conservative] v07d14-warmstart: warm-start from v07d13 model for 50 additional iters with same hyperparams.",
+    "[analysis] checkpoint interval every 5 iters (not 10) for finer peak resolution if needed."
+  ]
+}

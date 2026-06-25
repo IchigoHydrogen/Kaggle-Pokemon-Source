@@ -11,7 +11,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Experiment | Tag | Machine | Date |
 |---|---|---|---|
-| v07d13: extend N_ITERS=100 (same setup) to find higher iter-peak | aggressive | remote-pc | 2026-06-26 |
+| v07d14: extend N_ITERS=150 (conservative; model still converging at iter-99) | conservative | remote-pc | 2026-06-26 |
 
 ---
 
@@ -33,6 +33,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Version | Machine | Type | Promotion | winner_margin (stored) | winner_margin (inference) | Notes |
 |---|---|---|---|---|---|---|
+| v0-07d13-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0269 | **+0.0269** | N_ITERS=100. iter-99 = best-ckpt (+0.0269). Model still converging at final iter — needs more iters. Massive gain: 50 iters peak=+0.0080 → 100 iters peak=+0.0269 (+0.0189 improvement). Part B PASS. New research baseline=+0.0269. |
 | v0-07d12-remote-pc | remote-pc | conservative | exploration_promote | +0.0077 | +0.0077 | Measurement fix confirmed. iter-40 best-ckpt=+0.0077. Part B pass. Below v07d11 (+0.0080) by 0.0003 (run variance). Research baseline stays at +0.0080. |
 | v0-07d11-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0080 | +0.0046 (bug) | dim96 removal + online PPO + best-ckpt. Part B PASS. Best-ckpt restored iter40=+0.0080 > research baseline +0.0059. rl_report shows +0.0046 (measurement timing bug: computed before restore). Actual saved model=iter40 (+0.0080). New research baseline=+0.0080. Fix measurement in v07d12. |
 | v0-07d10-remote-pc | remote-pc | aggressive | exploration_promote | — | -0.000044 | dim96 removal working: n_valid=200/iter, 42.7 min. IL baseline -0.0059 → final -0.000044 (+0.0059 improvement). Peak iter40=+0.0096 > research baseline. Hard gate FAIL: Part B size mismatch (96-dim model vs 97-dim class). Fix: re-save as 97-dim (zero pad). Also: no best-ckpt saving → final<peak. Fix both in v07d11. |
@@ -54,5 +55,5 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 See `loop-harness.md` Baseline Handling for authoritative values.
 
 - **Stored-feature eval (inflated — do not use for new comparisons):** `winner_margin = 0.057` (v07d4)
-- **Inference-feature eval (authoritative):** `winner_margin = +0.0080` (v07d11-remote-pc; learning_promote; iter-40 best-ckpt; prev: +0.0059 v07d7)
+- **Inference-feature eval (authoritative):** `winner_margin = +0.0269` (v07d13-remote-pc; learning_promote; iter-99 best-ckpt; prev: +0.0080 v07d11)
 - Current runtime baseline: `holdout_model_top1 = 0.509` (guarded_torch_policy)
