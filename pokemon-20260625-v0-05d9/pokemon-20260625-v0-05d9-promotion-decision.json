@@ -1,0 +1,63 @@
+{
+  "version": "pokemon-20260625-v0-05d9",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "machine": "ei",
+  "experiment_type": "aggressive",
+  "development_track": "exploration_track",
+  "runtime_mode": "table_or_numpy_policy",
+  "fresh_training": true,
+  "mc_discount_gamma": 0.98,
+  "use_mc_return_weights": true,
+  "hard_gates": "pass",
+  "hard_gate_detail": {
+    "notebook_executed": true,
+    "main_py_compiles": true,
+    "error_count": 0,
+    "policy_table_entries": 43
+  },
+  "winner_margin_summary": {
+    "v05d9_overall": {
+      "winner_margin": 0.0841,
+      "winner_top1": 0.6424,
+      "loser_top1": 0.5582,
+      "n_winner": 741,
+      "n_loser": 704
+    },
+    "baseline_v05d7": {
+      "winner_margin": 0.0810,
+      "note": "MC なし"
+    },
+    "improvement": 0.0031,
+    "improvement_pct": "3.8%"
+  },
+  "phase_stratified_analysis": {
+    "early": {"winner_margin": 0.1016, "n": [231, 243]},
+    "mid":   {"winner_margin": 0.0772, "n": [274, 276]},
+    "late":  {"winner_margin": 0.0758, "n": [236, 185]},
+    "all":   {"winner_margin": 0.0841, "n": [741, 704]}
+  },
+  "key_finding": "UNEXPECTED: early-game winner_margin (0.102) > mid (0.077) > late (0.076). 仮説と逆。UNKNOWN_0 の winner signal は序盤が最も強い。MC weighting (γ=0.98) で終盤を優先したが、実際には序盤のシグナルが強い可能性。",
+  "holdout_summary": {
+    "hit_rate": 0.6269,
+    "correct_on_hits": 0.6014,
+    "baseline_correct_on_hits": 0.5970,
+    "note": "正確率は小改善。hit_rate は微減。"
+  },
+  "exploration_evidence": {
+    "mc_weighting_confirmed_improvement": true,
+    "improvement_magnitude": "modest (+0.003)",
+    "early_game_signal_strongest": true,
+    "hypothesis_partially_wrong": "early game は 'ノイズが多い' のではなく、winner/loser を最も区別する局面だった"
+  },
+  "known_risks": [
+    "改善幅 +0.003 は小さく、run-to-run variance の範囲の可能性",
+    "MC weighting で序盤を down-weight しているが、序盤こそ最強シグナルという逆説"
+  ],
+  "next_candidates": [
+    "v0-05d10-a: γ を逆方向に (γ=1/0.98、序盤を up-weight) して winner_margin への影響を確認",
+    "v0-05d10-b: phase-stratified policy table - early-game UNKNOWN_0 専用エントリを分けて学習",
+    "v0-05d10-c: early-game policy table のみを submission に使う (hit_rate は下がるが precision 向上を狙う)",
+    "v0-05d10-d: MC weights のリサーチをいったん止め、UNKNOWN_0 以外 (TO_BENCH) に専用小モデルを追加"
+  ]
+}
