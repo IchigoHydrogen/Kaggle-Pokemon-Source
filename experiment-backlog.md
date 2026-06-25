@@ -11,7 +11,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Experiment | Tag | Machine | Date |
 |---|---|---|---|
-| v07d12: fix rl_report measurement timing (recompute wm after best-ckpt restore) | conservative | remote-pc | 2026-06-26 |
+| v07d13: extend N_ITERS=100 (same setup) to find higher iter-peak | aggressive | remote-pc | 2026-06-26 |
 
 ---
 
@@ -33,6 +33,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Version | Machine | Type | Promotion | winner_margin (stored) | winner_margin (inference) | Notes |
 |---|---|---|---|---|---|---|
+| v0-07d12-remote-pc | remote-pc | conservative | exploration_promote | +0.0077 | +0.0077 | Measurement fix confirmed. iter-40 best-ckpt=+0.0077. Part B pass. Below v07d11 (+0.0080) by 0.0003 (run variance). Research baseline stays at +0.0080. |
 | v0-07d11-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0080 | +0.0046 (bug) | dim96 removal + online PPO + best-ckpt. Part B PASS. Best-ckpt restored iter40=+0.0080 > research baseline +0.0059. rl_report shows +0.0046 (measurement timing bug: computed before restore). Actual saved model=iter40 (+0.0080). New research baseline=+0.0080. Fix measurement in v07d12. |
 | v0-07d10-remote-pc | remote-pc | aggressive | exploration_promote | — | -0.000044 | dim96 removal working: n_valid=200/iter, 42.7 min. IL baseline -0.0059 → final -0.000044 (+0.0059 improvement). Peak iter40=+0.0096 > research baseline. Hard gate FAIL: Part B size mismatch (96-dim model vs 97-dim class). Fix: re-save as 97-dim (zero pad). Also: no best-ckpt saving → final<peak. Fix both in v07d11. |
 | v0-07d9-remote-pc | remote-pc | aggressive | needs_followup | — | -0.0059 (IL only) | dim96 removal: 2 bugs. Bug1: live_features hardcoded np.zeros((n,97)) → shape mismatch → 0 games collected. Bug2: Part B main.py used 97-dim class. 96-dim IL baseline = -0.0059 (stored=inference). Fix both in v07d10. |

@@ -1,0 +1,72 @@
+{
+  "version": "pokemon-20260625-v0-07d12-remote-pc",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "reason": "Measurement timing fix confirmed working: winner_margin_inference=+0.0077 now accurately reflects the saved model (iter-40 best-ckpt). Hard gates PASS (Part B ok). +0.0077 exceeds old v07d7 research baseline (+0.0059) but is below current v07d11 research baseline (+0.0080) by 0.0003 — within run variance. The iter-40 peak is consistent across v07d11 (+0.0080) and v07d12 (+0.0077), confirming this is a stable checkpoint location. Research baseline remains at +0.0080 (v07d11). Next aggressive experiment should extend N_ITERS or warm-start from v07d11/v07d12 model.",
+  "machine": "remote-pc",
+  "experiment_type": "conservative",
+  "consecutive_conservative_count": 1,
+  "development_track": "exploration_track",
+  "runtime_mode": "guarded_torch_policy",
+  "fresh_training": true,
+  "artifact_reuse": "v06d18 IL weights ([:,:96]); v06d18 feature matrix ([:,:96])",
+  "hard_gates": "pass",
+  "smoke_gate_ok": true,
+  "runtime_baseline": {
+    "holdout_model_top1": 0.509,
+    "runtime_mode": "guarded_torch_policy"
+  },
+  "research_baseline": {
+    "winner_margin_inference": 0.0080,
+    "source": "v07d11-remote-pc",
+    "note": "Unchanged — v07d12 (+0.0077) did not beat v07d11 (+0.0080)"
+  },
+  "winner_margin_summary": {
+    "winner_margin_stored": 0.0077,
+    "winner_margin_inference": 0.0077,
+    "il_baseline_winner_margin_96dim": -0.0059,
+    "research_baseline_v07d11": 0.0080,
+    "comparison": "-0.0003 below v07d11 (run variance)",
+    "improvement_vs_v07d7": "+0.0018 above old baseline",
+    "iter_margin_trajectory": {
+      "0": -0.0059,
+      "10": -0.0079,
+      "20": -0.0157,
+      "30": -0.0106,
+      "40": 0.0077,
+      "49": 0.0033
+    },
+    "best_checkpoint": {
+      "iter": 40,
+      "margin": 0.0077,
+      "restored": true
+    }
+  },
+  "runtime_summary": {
+    "part_b": "pass",
+    "kaggle_loader_model_loaded": true,
+    "entrypoint_ok": true
+  },
+  "training_summary": {
+    "rl_algo": "online PPO (PPO clip=0.2, lambda_il=0.5, lambda_rl=0.05)",
+    "rl_iters": 50,
+    "games_per_iter": 200,
+    "elapsed_min": 42.5,
+    "feat_dim": 96,
+    "lambda_il": 0.5,
+    "pre_rl_win_rate": 0.40,
+    "post_rl_win_rate": 0.28
+  },
+  "key_findings": {
+    "measurement_fix": "winner_margin_inference now computed AFTER best-ckpt restore — accurate",
+    "iter40_consistency": "iter-40 is best checkpoint in BOTH v07d11 (+0.0080) and v07d12 (+0.0077). The peak is consistently around iter 40 with 50-iter training.",
+    "peak_pattern": "iters 0-30 always negative (policy diverges from IL), iter 40 peak, iters 40-49 decline. Suggests optimal checkpoint is near iter 40.",
+    "run_variance": "+0.0080 vs +0.0077 across identical runs — ~0.0003 variance is small and acceptable."
+  },
+  "next_candidates": [
+    "[aggressive] v07d13: extend N_ITERS=100 (same hyperparams). iter-40 is consistently best with 50 iters; more iters may find higher peak or confirm iter-40 is the global optimum.",
+    "[aggressive] v07d13-warmstart: warm-start from v07d12 model, run 50 more iters. May find higher quality since starting from +0.0077 instead of IL baseline.",
+    "[conservative] v07d13-freq: reduce checkpoint interval to every 5 iters (not 10) for finer best-ckpt selection around iter 40.",
+    "[aggressive] v07d13-lambda: reduce lambda_il=0.4 (slight reduction from 0.5) to give RL more freedom while maintaining IL anchor."
+  ]
+}
