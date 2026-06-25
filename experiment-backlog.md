@@ -11,7 +11,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Experiment | Tag | Machine | Date |
 |---|---|---|---|
-| — | — | — | — |
+| Full pipeline with episodes-06-24 + Cell[25] fix + seed + dual eval + 30-iter online RL (v07d5-remote-pc) | conservative | remote-pc | 2026-06-25 |
 
 ---
 
