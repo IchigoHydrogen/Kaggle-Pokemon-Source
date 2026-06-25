@@ -1,0 +1,72 @@
+{
+  "version": "pokemon-20260625-v0-07d6-remote-pc",
+  "decision": "reject",
+  "promotion_type": "reject",
+  "reason": "REINFORCE (no clip) + lambda_il=0.5 caused significant forgetting. Stored wm=-0.0147 and inference wm=-0.0186, both well below the IL baseline (-0.0037) and v07d5 inference baseline (-0.0009). Removing the PPO clip removed the trust-region constraint; the weaker IL anchor (0.5) allowed unconstrained gradient steps that drove the policy away from IL without learning to win. Win rate also slightly declined (0.340→0.335). All hard gates passed.",
+  "machine": "remote-pc",
+  "experiment_type": "aggressive",
+  "consecutive_conservative_count": 0,
+  "development_track": "exploration_track",
+  "runtime_mode": "guarded_torch_policy",
+  "fresh_training": true,
+  "artifact_reuse": "v06d18 feature matrix, IL weights, decision rows (declared)",
+  "hard_gates": "pass",
+  "smoke_gate_ok": true,
+  "note_on_smoke_mode": "RUN_MODE=smoke env var was NOT passed to the Jupyter kernel (colab_kernel_launcher does not inherit shell env vars). Smoke run executed 50 iters x 200 games (full parameters). This is effectively the full run result. For future experiments, inject RUN_MODE via Cell[1] from a file or kernel args.",
+  "runtime_baseline": {
+    "holdout_model_top1": 0.509,
+    "runtime_mode": "guarded_torch_policy"
+  },
+  "research_baseline": {
+    "winner_margin_inference": -0.0009,
+    "source": "v07d5-remote-pc"
+  },
+  "winner_margin_summary": {
+    "holdout_winner_top1_stored": 0.5308,
+    "holdout_loser_top1_stored": 0.5455,
+    "holdout_winner_margin_stored": -0.0147,
+    "holdout_winner_top1_inference": 0.5308,
+    "holdout_loser_top1_inference": 0.5493,
+    "holdout_winner_margin_inference": -0.0186,
+    "il_baseline_winner_margin": -0.0037,
+    "v07d5_inference_baseline": -0.0009,
+    "improvement_vs_v07d5": "negative (-0.0186 < -0.0009)",
+    "improvement_vs_il": "negative (-0.0186 < -0.0037)"
+  },
+  "holdout_summary": {
+    "model_top1": 0.5308
+  },
+  "runtime_summary": {
+    "smoke_gate_ok": true,
+    "loader_entrypoint_ok": true,
+    "torch_load_ok": true,
+    "action_changes": 521,
+    "illegal_actions": 0,
+    "exceptions": 0,
+    "latency_p99_ms": 0.37
+  },
+  "training_summary": {
+    "rl_algo": "REINFORCE (no importance ratio, no clip)",
+    "rl_iters": 50,
+    "games_per_iter": 200,
+    "elapsed_min": 25.2,
+    "pre_rl_win_rate": 0.340,
+    "post_rl_win_rate": 0.335,
+    "lambda_il": 0.5,
+    "lambda_rl": 0.05,
+    "ppo_epochs": 1,
+    "forgetting_note": "IL_baseline=-0.0037 → post_RL=-0.0147 (delta=-0.0110). High-variance REINFORCE + weaker IL anchor drove policy away from IL without learning to win."
+  },
+  "exploration_summary": "REINFORCE (no clip) + lambda_il=0.5 failed. High gradient variance without importance ratio clipping caused unstable updates. Reducing IL anchor to 0.5 was insufficient to stabilize learning — the model forgot IL behavior without gaining RL signal. Next: test lambda_il reduction with PPO clip retained, or offline PPO on v07d6 episode buffer (481k decisions).",
+  "known_risks": [
+    "REINFORCE has high variance — without a trust-region constraint, updates can be large and noisy",
+    "lambda_il=0.5 may be too weak to prevent forgetting when combined with unconstrained updates",
+    "win_rate slightly declined (0.340→0.335) suggesting no game-level learning improvement"
+  ],
+  "next_candidates": [
+    "[conservative] v07d7: offline PPO on v07d6 episode buffer (481k decisions). Test whether PPO with stored episodes (now available) learns better than online. Primary metric: inference-feature winner_margin.",
+    "[conservative] v07d7-alt: keep PPO clip, reduce lambda_il to 0.3. Conservative reduction without removing trust region. Test if PPO clip prevents forgetting that REINFORCE showed.",
+    "[aggressive] v07d8: remove dim96 entirely from feature vector; retrain IL from scratch on 96-dim features. Removes leakage source entirely.",
+    "[aggressive] v07d9: lambda_il=0.1 with PPO — extreme IL reduction while keeping clip. Measures how much RL can dominate before forgetting sets in."
+  ]
+}

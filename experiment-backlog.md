@@ -19,13 +19,13 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | # | Experiment | Tag | Notes |
 |---|---|---|---|
-| 1 | REINFORCE with moving-average baseline (replace PPO) + reduce lambda_il to 0.5 | aggressive | v07d5 showed win_rate collapse 0.59→0.26 under PPO+lambda_il=1.0. REINFORCE has no clip; larger updates. Primary metric: inference-feature winner_margin. |
-| 2 | Offline PPO on large fresh episode buffer with inference-feature eval as primary metric | conservative | Re-establish calibrated baseline. v07d4 0.057 was inflated. Need offline PPO with dim96 leakage removed to get true episodic learning signal. |
-| 3 | Reduce lambda_il from 1.0 to 0.1 in online RL; monitor win_rate recovery | conservative | lambda_il=1.0 suppresses RL signal too strongly. Lower anchor allows RL to drive actual game wins. |
-| 4 | Remove dim96 from feature vector; retrain IL from scratch | aggressive | dim96 is unavailable at true inference (win-label leakage). Dropping it removes the inflation source and forces the model to learn from genuine board features. |
+| 1 | Offline PPO on v07d6 episode buffer (481k decisions); inference-feature eval primary metric | conservative | v07d6 generated 481k decisions. Test offline PPO on that buffer to see if PPO learns better than online REINFORCE. |
+| 2 | Online PPO + reduce lambda_il to 0.3 (keep clip); monitor forgetting vs learning | conservative | v07d6 showed REINFORCE (no clip) + lambda_il=0.5 = forgetting. Hypothesis: PPO clip prevents large updates. lambda_il=0.3 further reduces anchor while retaining stability. |
+| 3 | Remove dim96 from feature vector; retrain IL from scratch on 96-dim features | aggressive | dim96 is win-label leakage. Dropping it forces model to learn genuine board features. IL retraining required. |
+| 4 | Online PPO + lambda_il=0.1 (extreme reduction); measure how much RL dominates before forgetting | aggressive | Tests lower bound of IL anchor with PPO clip retained. Measures REINFORCE-vs-PPO tradeoff in forgetting regime. |
 | 5 | Feature expansion: add opponent-hand-size and energy-in-play signals to the 97-dim feature vector | aggressive | Current features may be missing key board-state signals. Feature dim change requires fresh episode collection. |
-| 6 | Architecture change: option-wise attention (score each legal option against a board context vector) instead of flat MLP | aggressive | Flat MLP treats each option independently. Attention can model relative option quality. |
-| 7 | Reward shaping: add dense intermediate reward based on prize-card differential change per step | aggressive | Current reward is sparse (prize cards at end). Dense shaping could accelerate RL convergence. |
+| 6 | Architecture change: option-wise attention instead of flat MLP | aggressive | Flat MLP treats each option independently. Attention can model relative option quality. |
+| 7 | Reward shaping: add dense intermediate reward based on prize-card differential change per step | aggressive | Current reward is sparse. Dense shaping could accelerate RL convergence. |
 
 ---
 
@@ -33,6 +33,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Version | Machine | Type | Promotion | winner_margin (stored) | winner_margin (inference) | Notes |
 |---|---|---|---|---|---|---|
+| v0-07d6-remote-pc | remote-pc | aggressive | reject | -0.0147 | -0.0186 | REINFORCE+lambda_il=0.5: forgetting (IL base=-0.0037 → post-RL=-0.0147). High-variance REINFORCE + weak anchor drove policy away from IL. Gates pass. 25 min (50 iters, smoke env var didn't reach kernel). |
 | v0-07d5-remote-pc | remote-pc | conservative | exploration_promote | 0.0068 | -0.0009 | CRITICAL: dim96 leakage confirmed. Inference margin near-zero. All prior stored margins inflated. Smoke gate confirmed. 31 min on RTX4090. |
 | v0-07d4 | ei | conservative | exploration_promote | 0.057 | n/a (not measured) | Offline PPO on v07d3 episodes (8 epochs). Stored margin inflated by dim96. Smoke gate not confirmed. |
 | v0-07d3 | ei | conservative | exploration_promote | 0.008 | n/a | Episode saving infra. Torch seed variance. |
