@@ -1,0 +1,20 @@
+{
+  "version": "pokemon-20260625-v0-05d14",
+  "decision": "explore_stop",
+  "reason": "v05d13 (T*2/3=0.67) is better (0.1115 vs 0.1045). step_fraction 0.67-0.75 adds noise.",
+  "winner_margin": 0.1045,
+  "n_winner": 709,
+  "n_loser": 661,
+  "table_entries": 36,
+  "holdout_hit_rate": 0.5944,
+  "sweep_conclusion": {
+    "optimal_cutoff": 0.667,
+    "T1_3": 0.0958,
+    "T1_2": 0.0982,
+    "T2_3": 0.1115,
+    "T3_4": 0.1045,
+    "full": 0.0852
+  },
+  "best_version": "pokemon-20260625-v0-05d13",
+  "next": "promote v05d13 as main submission. Consider TO_BENCH context policy or finer cutoff tuning around 0.65-0.67."
+}

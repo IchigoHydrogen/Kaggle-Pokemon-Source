@@ -1,0 +1,1581 @@
+{
+  "experiment": "v0_05d14_three_quarters_filter",
+  "run_mode": "full",
+  "train_mode": true,
+  "submission_policy_mode": "alakazam_rule_base",
+  "use_neural_for_submission": false,
+  "use_mlp_reranker_for_submission": false,
+  "mlp_submission_contexts": [],
+  "mlp_alpha": 0.1,
+  "auto_select_submission_deck": false,
+  "submission_deck_hash_override": "",
+  "selected_deck_source": "default_kadoraba_fallback",
+  "selected_deck_hash": "e702674c1864",
+  "candidate_deck_rows": 13,
+  "candidate_deck_review_rows": 13,
+  "unknown_context_rows": 14,
+  "unknown_context_deep_dive_rows": 56,
+  "top200_rows": 200,
+  "episode_files": 5516,
+  "non_episode_json_skipped": 0,
+  "episode_index_rows": 5516,
+  "decklist_rows": 11032,
+  "decision_rows": 1517447,
+  "option_rows": 8395122,
+  "episode_split_rows": 5516,
+  "split_summary_rows": 3,
+  "stress_slice_summary_rows": 60,
+  "episode_split_counts": {
+    "holdout": 844,
+    "train": 3840,
+    "valid": 832
+  },
+  "alakazam_option_model_rows": 1383151,
+  "bc_contexts": [
+    "30",
+    "37",
+    "38",
+    "41",
+    "43",
+    "ALL",
+    "ATTACH_FROM",
+    "MAIN",
+    "SETUP_ACTIVE_POKEMON",
+    "SETUP_BENCH_POKEMON",
+    "SWITCH",
+    "TO_ACTIVE",
+    "TO_BENCH",
+    "TO_HAND",
+    "UNKNOWN_0"
+  ],
+  "weighted_bc_contexts": [
+    "30",
+    "37",
+    "38",
+    "41",
+    "43",
+    "ATTACH_FROM",
+    "MAIN",
+    "SETUP_ACTIVE_POKEMON",
+    "SETUP_BENCH_POKEMON",
+    "SWITCH",
+    "TO_ACTIVE",
+    "TO_BENCH",
+    "TO_HAND",
+    "UNKNOWN_0"
+  ],
+  "value_report": {
+    "status": "ok",
+    "rows": 156620,
+    "train_rows": 133127,
+    "valid_rows": 23493,
+    "auc": 0.7469141224413812,
+    "logloss": 0.591136121299717
+  },
+  "mlp_reranker_report": {
+    "status": "ok",
+    "rows": 759333,
+    "train_rows": 647045,
+    "valid_rows": 112288,
+    "train_decisions": 61716,
+    "valid_decisions": 10890,
+    "epochs": 4,
+    "batch_size": 4096,
+    "device": "cuda",
+    "positive_rate": 0.09755798839244442,
+    "pos_weight": 9.27806017091845,
+    "epoch_losses": [
+      0.9622331078617998,
+      0.8745680655714141,
+      0.8528033793734843,
+      0.8426480006638819
+    ],
+    "row_auc": 0.8596520200406352,
+    "row_logloss": 0.43485394127955523,
+    "mlp_decision_metrics": {
+      "decisions": 10890,
+      "top1": 0.503305785123967,
+      "top3": 0.7534435261707989,
+      "avg_chosen_rank": 2.8702479338842974
+    },
+    "rule_proxy_decision_metrics": {
+      "decisions": 10890,
+      "top1": 0.3575757575757576,
+      "top3": 0.5821854912764004,
+      "avg_chosen_rank": 5.133976124885216
+    },
+    "bc_decision_metrics": {
+      "decisions": 10890,
+      "top1": 0.4460973370064279,
+      "top3": 0.7252525252525253,
+      "avg_chosen_rank": 3.415794306703398
+    },
+    "feature_safety": "submission_safe_features_only_except opponent_archetype_if_replay_inferred",
+    "submission_enabled": false
+  },
+  "mlp_context_report_rows": 16,
+  "mlp_disagreement_examples_rows": 250,
+  "unknown0_action_report_rows": 64,
+  "mlp_submission_safety": {
+    "enabled": false,
+    "contexts": [],
+    "alpha": 0.1,
+    "torch_in_submission": false,
+    "fallback": "rule_only"
+  },
+  "unknown0_mlp_report": {
+    "status": "ok",
+    "rows": 350000,
+    "train_rows": 297389,
+    "valid_rows": 52611,
+    "train_decisions": 80954,
+    "valid_decisions": 14285,
+    "epochs": 4,
+    "batch_size": 4096,
+    "device": "cuda",
+    "positive_rate": 0.27211142857142856,
+    "pos_weight": 2.673555352422363,
+    "epoch_losses": [
+      0.8360566832818036,
+      0.755634251780783,
+      0.7225482789976729,
+      0.7062805235846675
+    ],
+    "row_auc": 0.8545006783815161,
+    "row_logloss": 0.49315897328377717,
+    "unknown0_mlp_decision_metrics": {
+      "decisions": 14285,
+      "top1": 0.7087154357717886,
+      "top3": 0.9404270213510676,
+      "avg_chosen_rank": 1.5260063003150157
+    },
+    "rule_proxy_decision_metrics": {
+      "decisions": 14285,
+      "top1": 0.4358417920896045,
+      "top3": 0.7966398319915996,
+      "avg_chosen_rank": 2.4066503325166257
+    },
+    "bc_decision_metrics": {
+      "decisions": 14285,
+      "top1": 0.6613930696534827,
+      "top3": 0.9178858942947148,
+      "avg_chosen_rank": 1.687574378718936
+    },
+    "feature_safety": {
+      "requested_feature_count": 40,
+      "forbidden_feature_count": 0,
+      "uses_visualize_features_for_mlp": false,
+      "offline_only_feature_count": 0
+    },
+    "allowed_signatures": [
+      "END|N1",
+      "END|N1|NO",
+      "END|N1|NO|YES",
+      "END|N1|NUMBER",
+      "END|N1|YES",
+      "END|N3p",
+      "END|N3p|NO",
+      "END|N3p|NO|YES",
+      "END|N3p|NUMBER",
+      "END|N3p|NUMBER|YES",
+      "END|N3p|YES"
+    ],
+    "policy_table_entries": 36,
+    "policy_fit_split_summary": {
+      "status": "ok",
+      "excluded_splits": [
+        "holdout"
+      ],
+      "input_rows": 52611,
+      "fit_rows": 44236,
+      "excluded_rows": 8375,
+      "input_decisions": 14285,
+      "fit_decisions": 11980,
+      "excluded_decisions": 2305,
+      "split_rows": {
+        "holdout": 8375,
+        "train": 35981,
+        "valid": 8255
+      },
+      "split_decisions": {
+        "holdout": 2305,
+        "train": 9782,
+        "valid": 2198
+      }
+    },
+    "direct_mlp_packaging_status": {
+      "status": "not_built",
+      "reason": "main.py remains torch-free; the submission variant uses a distilled policy table with rule fallback"
+    }
+  },
+  "unknown0_mlp_signature_report_rows": 47,
+  "unknown0_mlp_calibration_rows": 8,
+  "unknown0_rule_proxy_assist_report_rows": 3,
+  "unknown0_policy_decision_eval_rows": 14285,
+  "unknown0_policy_split_eval_rows": 3,
+  "unknown0_policy_stress_eval_rows": 12,
+  "unknown0_policy_holdout_eval": {
+    "split": "holdout",
+    "decisions": 2305,
+    "episodes": 360,
+    "policy_hit_decisions": 1370,
+    "single_option_decisions": 433,
+    "policy_hit_rate": 0.5943600867678959,
+    "policy_correct_rate_on_hits": 0.5941605839416059,
+    "mlp_top1": 0.7032537960954447,
+    "rule_top1": 0.4334056399132321,
+    "bc_top1": 0.662472885032538,
+    "avg_margin": 0.2844697848623061
+  },
+  "unknown0_policy_summary": {
+    "status": "ok",
+    "entries": 36,
+    "allowed_signatures": [
+      "END|N1",
+      "END|N1|NO",
+      "END|N1|NO|YES",
+      "END|N1|NUMBER",
+      "END|N1|YES",
+      "END|N3p",
+      "END|N3p|NO",
+      "END|N3p|NO|YES",
+      "END|N3p|NUMBER",
+      "END|N3p|NUMBER|YES",
+      "END|N3p|YES"
+    ],
+    "margin_threshold": 0.2,
+    "min_table_acc": 0.75,
+    "fit_split_filter": {
+      "status": "ok",
+      "excluded_splits": [
+        "holdout"
+      ],
+      "input_rows": 52611,
+      "fit_rows": 44236,
+      "excluded_rows": 8375,
+      "input_decisions": 14285,
+      "fit_decisions": 11980,
+      "excluded_decisions": 2305,
+      "split_rows": {
+        "holdout": 8375,
+        "train": 35981,
+        "valid": 8255
+      },
+      "split_decisions": {
+        "holdout": 2305,
+        "train": 9782,
+        "valid": 2198
+      }
+    }
+  },
+  "unknown0_policy_fit_split_summary": {
+    "status": "ok",
+    "excluded_splits": [
+      "holdout"
+    ],
+    "input_rows": 52611,
+    "fit_rows": 44236,
+    "excluded_rows": 8375,
+    "input_decisions": 14285,
+    "fit_decisions": 11980,
+    "excluded_decisions": 2305,
+    "split_rows": {
+      "holdout": 8375,
+      "train": 35981,
+      "valid": 8255
+    },
+    "split_decisions": {
+      "holdout": 2305,
+      "train": 9782,
+      "valid": 2198
+    }
+  },
+  "unknown0_policy_fit_signature_report_rows": 47,
+  "unknown0_policy_table_entries": 36,
+  "unknown0_policy_min_table_acc": 0.75,
+  "unknown0_policy_source_status": {
+    "status": "ok",
+    "policy_table_entries": 36,
+    "torch_in_submission": false,
+    "runtime_instrumentation": true
+  },
+  "unknown0_direct_mlp_packaging_status": {
+    "status": "not_built",
+    "reason": "main.py remains torch-free; the submission variant uses a distilled policy table with rule fallback"
+  },
+  "final_submission_variant_requested": "unknown0_policy_table",
+  "final_submission_variant_effective": "unknown0_policy_table",
+  "submission_variant_summaries": {
+    "rule_only": {
+      "archive": "pokemon-20260625-v0-05d14-submission-rule-only.tar.gz",
+      "files": 17,
+      "cg_dir": "/kaggle/input/competitions/pokemon-tcg-ai-battle/sample_submission/cg",
+      "required_present": [
+        "cg/api.py",
+        "cg/game.py",
+        "deck.csv",
+        "main.py"
+      ],
+      "preview": [
+        "cg",
+        "cg/__init__.py",
+        "cg/__init__.py:Zone.Identifier",
+        "cg/api.py",
+        "cg/api.py:Zone.Identifier",
+        "cg/cg.dll",
+        "cg/cg.dll:Zone.Identifier",
+        "cg/game.py",
+        "cg/game.py:Zone.Identifier",
+        "cg/libcg.so",
+        "cg/libcg.so:Zone.Identifier",
+        "cg/sim.py",
+        "cg/sim.py:Zone.Identifier",
+        "cg/utils.py",
+        "cg/utils.py:Zone.Identifier",
+        "deck.csv",
+        "main.py"
+      ],
+      "status": "ok",
+      "variant": "rule_only",
+      "torch_in_submission": false,
+      "runtime_instrumentation": false
+    },
+    "unknown0_policy_table": {
+      "archive": "pokemon-20260625-v0-05d14-submission-unknown0-policy-table.tar.gz",
+      "files": 17,
+      "cg_dir": "/kaggle/input/competitions/pokemon-tcg-ai-battle/sample_submission/cg",
+      "required_present": [
+        "cg/api.py",
+        "cg/game.py",
+        "deck.csv",
+        "main.py"
+      ],
+      "preview": [
+        "cg",
+        "cg/__init__.py",
+        "cg/__init__.py:Zone.Identifier",
+        "cg/api.py",
+        "cg/api.py:Zone.Identifier",
+        "cg/cg.dll",
+        "cg/cg.dll:Zone.Identifier",
+        "cg/game.py",
+        "cg/game.py:Zone.Identifier",
+        "cg/libcg.so",
+        "cg/libcg.so:Zone.Identifier",
+        "cg/sim.py",
+        "cg/sim.py:Zone.Identifier",
+        "cg/utils.py",
+        "cg/utils.py:Zone.Identifier",
+        "deck.csv",
+        "main.py"
+      ],
+      "status": "ok",
+      "variant": "unknown0_policy_table",
+      "torch_in_submission": false,
+      "runtime_instrumentation": true
+    }
+  },
+  "submission_variant_eval_summaries": {
+    "rule_only": {
+      "status": "ok",
+      "summary": {
+        "suite": "variant_smoke",
+        "opponent": "rule_only",
+        "games": 12,
+        "wins": 10,
+        "win_rate": 0.8333333333333334,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 125.75,
+        "rows_preview": [
+          {
+            "suite": "variant_smoke",
+            "opponent": "rule_only",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 164,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "rule_only",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 64,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "rule_only",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 89,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "rule_only",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 210,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "rule_only",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 84,
+            "error": "",
+            "illegal_action": false
+          }
+        ],
+        "variant": "rule_only",
+        "unknown0_policy_runtime_stats": {
+          "stats": {},
+          "selected_option_type_counts": {},
+          "hit_key_counts_top20": [],
+          "hit_rate_over_eligible": 0.0,
+          "miss_rate_over_eligible": 0.0
+        }
+      },
+      "rows_preview": [
+        {
+          "suite": "variant_smoke",
+          "opponent": "rule_only",
+          "game": 0,
+          "seat": 0,
+          "won": true,
+          "result": 0,
+          "steps": 164,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "rule_only",
+          "game": 1,
+          "seat": 1,
+          "won": true,
+          "result": 1,
+          "steps": 64,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "rule_only",
+          "game": 2,
+          "seat": 0,
+          "won": true,
+          "result": 0,
+          "steps": 89,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "rule_only",
+          "game": 3,
+          "seat": 1,
+          "won": true,
+          "result": 1,
+          "steps": 210,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "rule_only",
+          "game": 4,
+          "seat": 0,
+          "won": true,
+          "result": 0,
+          "steps": 84,
+          "error": "",
+          "illegal_action": false
+        }
+      ]
+    },
+    "unknown0_policy_table": {
+      "status": "ok",
+      "summary": {
+        "suite": "variant_smoke",
+        "opponent": "unknown0_policy_table",
+        "games": 12,
+        "wins": 10,
+        "win_rate": 0.8333333333333334,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 100.58333333333333,
+        "rows_preview": [
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 99,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 129,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 152,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 192,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 97,
+            "error": "",
+            "illegal_action": false
+          }
+        ],
+        "variant": "unknown0_policy_table",
+        "unknown0_policy_runtime_stats": {
+          "stats": {
+            "calls": 566,
+            "unknown0_context": 341,
+            "eligible": 341,
+            "key_hit": 0,
+            "signature_fallback_hit": 0,
+            "miss": 341,
+            "no_candidate": 0,
+            "selected": 0
+          },
+          "selected_option_type_counts": {},
+          "hit_key_counts_top20": [],
+          "hit_rate_over_eligible": 0.0,
+          "miss_rate_over_eligible": 1.0
+        }
+      },
+      "rows_preview": [
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 0,
+          "seat": 0,
+          "won": true,
+          "result": 0,
+          "steps": 99,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 1,
+          "seat": 1,
+          "won": true,
+          "result": 1,
+          "steps": 129,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 2,
+          "seat": 0,
+          "won": true,
+          "result": 0,
+          "steps": 152,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 3,
+          "seat": 1,
+          "won": true,
+          "result": 1,
+          "steps": 192,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 4,
+          "seat": 0,
+          "won": true,
+          "result": 0,
+          "steps": 97,
+          "error": "",
+          "illegal_action": false
+        }
+      ]
+    }
+  },
+  "eval_games": {
+    "smoke": 16,
+    "confirm": 80,
+    "meta_per_opponent": 20
+  },
+  "cg_import_status": {
+    "available": true,
+    "cg_dir": "/kaggle/input/competitions/pokemon-tcg-ai-battle/sample_submission/cg",
+    "cg_parent": "/kaggle/input/competitions/pokemon-tcg-ai-battle/sample_submission",
+    "added_to_sys_path": true,
+    "error": ""
+  },
+  "local_eval_summary": {
+    "status": "ok",
+    "cg_import_status": {
+      "available": true,
+      "cg_dir": null,
+      "cg_parent": null,
+      "added_to_sys_path": false,
+      "error": ""
+    },
+    "summaries": {
+      "smoke": {
+        "suite": "smoke",
+        "opponent": "random_same_deck",
+        "games": 16,
+        "wins": 16,
+        "win_rate": 1.0,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 108.0625,
+        "rows_preview": [
+          {
+            "suite": "smoke",
+            "opponent": "random_same_deck",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 150,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "smoke",
+            "opponent": "random_same_deck",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 112,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "smoke",
+            "opponent": "random_same_deck",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 87,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "smoke",
+            "opponent": "random_same_deck",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 120,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "smoke",
+            "opponent": "random_same_deck",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 32,
+            "error": "",
+            "illegal_action": false
+          }
+        ]
+      },
+      "confirm_random_same_deck": {
+        "suite": "confirm",
+        "opponent": "random_same_deck",
+        "games": 40,
+        "wins": 38,
+        "win_rate": 0.95,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 133.175,
+        "rows_preview": [
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 170,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 196,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 117,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 145,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 182,
+            "error": "",
+            "illegal_action": false
+          }
+        ]
+      },
+      "confirm_first_valid_same_deck": {
+        "suite": "confirm",
+        "opponent": "first_valid_same_deck",
+        "games": 40,
+        "wins": 39,
+        "win_rate": 0.975,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 90.525,
+        "rows_preview": [
+          {
+            "suite": "confirm",
+            "opponent": "first_valid_same_deck",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 47,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "first_valid_same_deck",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 168,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "first_valid_same_deck",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 92,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "first_valid_same_deck",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 199,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "first_valid_same_deck",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 62,
+            "error": "",
+            "illegal_action": false
+          }
+        ]
+      },
+      "confirm": {
+        "suite": "confirm",
+        "opponent": "mixed_basic",
+        "games": 80,
+        "wins": 77,
+        "win_rate": 0.9625,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 111.85,
+        "rows_preview": [
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 170,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 196,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 117,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 145,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "confirm",
+            "opponent": "random_same_deck",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 182,
+            "error": "",
+            "illegal_action": false
+          }
+        ]
+      },
+      "meta_random_hop_control_deck": {
+        "suite": "meta",
+        "opponent": "random_hop_control_deck",
+        "games": 20,
+        "wins": 14,
+        "win_rate": 0.7,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 123.25,
+        "rows_preview": [
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 64,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 106,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 138,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 124,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 4,
+            "seat": 0,
+            "won": false,
+            "result": 1,
+            "steps": 138,
+            "error": "",
+            "illegal_action": false
+          }
+        ]
+      },
+      "meta_random_alakazam_mirror_deck": {
+        "suite": "meta",
+        "opponent": "random_alakazam_mirror_deck",
+        "games": 20,
+        "wins": 18,
+        "win_rate": 0.9,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 104.8,
+        "rows_preview": [
+          {
+            "suite": "meta",
+            "opponent": "random_alakazam_mirror_deck",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 189,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_alakazam_mirror_deck",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 68,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_alakazam_mirror_deck",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 105,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_alakazam_mirror_deck",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 55,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_alakazam_mirror_deck",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 77,
+            "error": "",
+            "illegal_action": false
+          }
+        ]
+      },
+      "meta_first_valid_alakazam_mirror_deck": {
+        "suite": "meta",
+        "opponent": "first_valid_alakazam_mirror_deck",
+        "games": 20,
+        "wins": 20,
+        "win_rate": 1.0,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 81.15,
+        "rows_preview": [
+          {
+            "suite": "meta",
+            "opponent": "first_valid_alakazam_mirror_deck",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 67,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "first_valid_alakazam_mirror_deck",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 25,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "first_valid_alakazam_mirror_deck",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 49,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "first_valid_alakazam_mirror_deck",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 44,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "first_valid_alakazam_mirror_deck",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 102,
+            "error": "",
+            "illegal_action": false
+          }
+        ]
+      },
+      "meta_random_lucario_exp14_deck": {
+        "suite": "meta",
+        "opponent": "random_lucario_exp14_deck",
+        "games": 20,
+        "wins": 19,
+        "win_rate": 0.95,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 76.05,
+        "rows_preview": [
+          {
+            "suite": "meta",
+            "opponent": "random_lucario_exp14_deck",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 126,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_lucario_exp14_deck",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 43,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_lucario_exp14_deck",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 48,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_lucario_exp14_deck",
+            "game": 3,
+            "seat": 1,
+            "won": false,
+            "result": 0,
+            "steps": 20,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_lucario_exp14_deck",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 39,
+            "error": "",
+            "illegal_action": false
+          }
+        ]
+      },
+      "meta": {
+        "suite": "meta",
+        "opponent": "mixed_meta_deck_sanity",
+        "games": 80,
+        "wins": 71,
+        "win_rate": 0.8875,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 96.3125,
+        "rows_preview": [
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 64,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 106,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 138,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 124,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "meta",
+            "opponent": "random_hop_control_deck",
+            "game": 4,
+            "seat": 0,
+            "won": false,
+            "result": 1,
+            "steps": 138,
+            "error": "",
+            "illegal_action": false
+          }
+        ]
+      }
+    },
+    "total_rows": 176,
+    "final_variant": "unknown0_policy_table",
+    "selected_variant_smoke_eval_with_policy_stats": {
+      "status": "ok",
+      "summary": {
+        "suite": "variant_smoke",
+        "opponent": "unknown0_policy_table",
+        "games": 12,
+        "wins": 10,
+        "win_rate": 0.8333333333333334,
+        "errors": 0,
+        "illegal_action_count": 0,
+        "avg_steps": 100.58333333333333,
+        "rows_preview": [
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 0,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 99,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 1,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 129,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 2,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 152,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 3,
+            "seat": 1,
+            "won": true,
+            "result": 1,
+            "steps": 192,
+            "error": "",
+            "illegal_action": false
+          },
+          {
+            "suite": "variant_smoke",
+            "opponent": "unknown0_policy_table",
+            "game": 4,
+            "seat": 0,
+            "won": true,
+            "result": 0,
+            "steps": 97,
+            "error": "",
+            "illegal_action": false
+          }
+        ],
+        "variant": "unknown0_policy_table",
+        "unknown0_policy_runtime_stats": {
+          "stats": {
+            "calls": 566,
+            "unknown0_context": 341,
+            "eligible": 341,
+            "key_hit": 0,
+            "signature_fallback_hit": 0,
+            "miss": 341,
+            "no_candidate": 0,
+            "selected": 0
+          },
+          "selected_option_type_counts": {},
+          "hit_key_counts_top20": [],
+          "hit_rate_over_eligible": 0.0,
+          "miss_rate_over_eligible": 1.0
+        }
+      },
+      "rows_preview": [
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 0,
+          "seat": 0,
+          "won": true,
+          "result": 0,
+          "steps": 99,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 1,
+          "seat": 1,
+          "won": true,
+          "result": 1,
+          "steps": 129,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 2,
+          "seat": 0,
+          "won": true,
+          "result": 0,
+          "steps": 152,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 3,
+          "seat": 1,
+          "won": true,
+          "result": 1,
+          "steps": 192,
+          "error": "",
+          "illegal_action": false
+        },
+        {
+          "suite": "variant_smoke",
+          "opponent": "unknown0_policy_table",
+          "game": 4,
+          "seat": 0,
+          "won": true,
+          "result": 0,
+          "steps": 97,
+          "error": "",
+          "illegal_action": false
+        }
+      ]
+    }
+  },
+  "submission_summary": {
+    "archive": "pokemon-20260625-v0-05d14-submission.tar.gz",
+    "files": 17,
+    "cg_dir": "/kaggle/input/competitions/pokemon-tcg-ai-battle/sample_submission/cg",
+    "required_present": [
+      "cg/api.py",
+      "cg/game.py",
+      "deck.csv",
+      "main.py"
+    ],
+    "preview": [
+      "cg",
+      "cg/__init__.py",
+      "cg/__init__.py:Zone.Identifier",
+      "cg/api.py",
+      "cg/api.py:Zone.Identifier",
+      "cg/cg.dll",
+      "cg/cg.dll:Zone.Identifier",
+      "cg/game.py",
+      "cg/game.py:Zone.Identifier",
+      "cg/libcg.so",
+      "cg/libcg.so:Zone.Identifier",
+      "cg/sim.py",
+      "cg/sim.py:Zone.Identifier",
+      "cg/utils.py",
+      "cg/utils.py:Zone.Identifier",
+      "deck.csv",
+      "main.py"
+    ],
+    "status": "ok",
+    "variant": "unknown0_policy_table",
+    "runtime_instrumentation": true
+  },
+  "error_count": 0,
+  "artifacts": {
+    "episode_index": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-episode_index.parquet",
+    "decklists": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-decklists.parquet",
+    "decision_rows": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-decision_rows.parquet",
+    "option_rows": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-option_rows.parquet",
+    "state_summary": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-state_summary.parquet",
+    "non_episode_json": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-non_episode_json.parquet",
+    "episode_split": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-episode_split.parquet",
+    "split_summary": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-split_summary.parquet",
+    "stress_slice_summary": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-stress_slice_summary.parquet",
+    "alakazam_deck_ranking": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-alakazam_deck_ranking.parquet",
+    "alakazam_matchup_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-alakazam_matchup_report.parquet",
+    "alakazam_candidate_deck_comparison": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-alakazam_candidate_deck_comparison.parquet",
+    "alakazam_option_model_df": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-alakazam_option_model_df.parquet",
+    "unknown_context_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown_context_report.parquet",
+    "unknown_context_examples": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown_context_examples.parquet",
+    "unknown_context_deep_dive": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown_context_deep_dive.parquet",
+    "alakazam_model_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-alakazam_model_report.parquet",
+    "alakazam_bc_models": "/kaggle/working/pokemon-20260625-v0-05d14/models/pokemon-20260625-v0-05d14-alakazam_bc_models.pkl",
+    "alakazam_weighted_bc_models": "/kaggle/working/pokemon-20260625-v0-05d14/models/pokemon-20260625-v0-05d14-alakazam_weighted_bc_models.pkl",
+    "alakazam_value_dataset": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-alakazam_value_dataset.parquet",
+    "alakazam_value_model": "/kaggle/working/pokemon-20260625-v0-05d14/models/pokemon-20260625-v0-05d14-alakazam_value_model.pkl",
+    "alakazam_phase_diagnostics": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-alakazam_phase_diagnostics.parquet",
+    "alakazam_patch_candidates": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-alakazam_patch_candidates.json",
+    "candidate_deck_review": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-candidate_deck_review.parquet",
+    "context_threshold_recommendations": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-context_threshold_recommendations.parquet",
+    "error_classification": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-error_classification.parquet",
+    "unknown0_action_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_action_report.parquet",
+    "alakazam_mlp_reranker": "/kaggle/working/pokemon-20260625-v0-05d14/models/pokemon-20260625-v0-05d14-alakazam_mlp_reranker.pt",
+    "alakazam_mlp_preprocessor": "/kaggle/working/pokemon-20260625-v0-05d14/models/pokemon-20260625-v0-05d14-alakazam_mlp_preprocessor.pkl",
+    "mlp_context_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-mlp_context_report.parquet",
+    "mlp_valid_predictions": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-mlp_valid_predictions.parquet",
+    "mlp_disagreement_examples": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-mlp_disagreement_examples.parquet",
+    "mlp_reranker_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-mlp_reranker_report.json",
+    "mlp_submission_safety": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-mlp_submission_safety.json",
+    "unknown0_mlp_reranker": "/kaggle/working/pokemon-20260625-v0-05d14/models/pokemon-20260625-v0-05d14-unknown0_mlp_reranker.pt",
+    "unknown0_mlp_preprocessor": "/kaggle/working/pokemon-20260625-v0-05d14/models/pokemon-20260625-v0-05d14-unknown0_mlp_preprocessor.pkl",
+    "unknown0_mlp_valid_predictions": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_mlp_valid_predictions.parquet",
+    "unknown0_mlp_signature_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_mlp_signature_report.parquet",
+    "unknown0_mlp_calibration": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_mlp_calibration.parquet",
+    "unknown0_policy_fit_signature_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_policy_fit_signature_report.parquet",
+    "unknown0_rule_proxy_assist_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_rule_proxy_assist_report.parquet",
+    "unknown0_policy_table": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_policy_table.parquet",
+    "unknown0_policy_table_json": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_policy_table.json",
+    "unknown0_mlp_report": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_mlp_report.json",
+    "unknown0_policy_summary": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_policy_summary.json",
+    "unknown0_policy_fit_split_summary": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_policy_fit_split_summary.json",
+    "unknown0_direct_mlp_packaging_status": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_direct_mlp_packaging_status.json",
+    "unknown0_policy_decision_eval": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_policy_decision_eval.parquet",
+    "unknown0_policy_split_eval": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_policy_split_eval.parquet",
+    "unknown0_policy_stress_eval": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-unknown0_policy_stress_eval.parquet",
+    "submission_rule_only": "pokemon-20260625-v0-05d14-submission-rule-only.tar.gz",
+    "submission_unknown0_policy_table": "pokemon-20260625-v0-05d14-submission-unknown0-policy-table.tar.gz",
+    "local_eval_rows_json": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-local_eval_rows.json",
+    "local_eval_rows": "/kaggle/working/pokemon-20260625-v0-05d14/pokemon-20260625-v0-05d14-local_eval_rows_table.parquet",
+    "submission_final": "pokemon-20260625-v0-05d14-submission.tar.gz"
+  },
+  "next_review_points": [
+    "Review candidate_deck_review before setting SUBMISSION_DECK_HASH_OVERRIDE.",
+    "Inspect unknown_context_deep_dive before assigning manual context names.",
+    "Treat meta eval opponents as stability tests unless real top-agent sources are added.",
+    "Check unknown0_policy_runtime_stats: selected/hit rate should be > 0 before trusting the policy-table submission.",
+    "If unknown0_policy_table has illegal actions or zero hit rate, fall back to rule_only.",
+    "Keep torch out of main.py; UNKNOWN_0 assist uses a distilled policy table with rule fallback."
+  ],
+  "unknown0_winner_margin_report": {
+    "status": "ok",
+    "scope": "UNKNOWN_0 holdout policy_hit=True",
+    "winner_decisions": 709,
+    "loser_decisions": 661,
+    "winner_top1": 0.6445698166431594,
+    "loser_top1": 0.540090771558245,
+    "winner_margin": 0.10447904508491435,
+    "low_confidence": false
+  },
+  "mc_phase_winner_margin": {
+    "status": "ok",
+    "gamma": 0.98,
+    "use_mc_weights": true,
+    "baseline_v05d7": 0.081,
+    "phases": {
+      "early": {
+        "n_winner": 214,
+        "n_loser": 225,
+        "winner_top1": 0.6401869158878505,
+        "loser_top1": 0.5333333333333333,
+        "winner_margin": 0.106854,
+        "low_confidence": false
+      },
+      "mid": {
+        "n_winner": 263,
+        "n_loser": 258,
+        "winner_top1": 0.6577946768060836,
+        "loser_top1": 0.5503875968992248,
+        "winner_margin": 0.107407,
+        "low_confidence": false
+      },
+      "late": {
+        "n_winner": 232,
+        "n_loser": 178,
+        "winner_top1": 0.6336206896551724,
+        "loser_top1": 0.5337078651685393,
+        "winner_margin": 0.099913,
+        "low_confidence": false
+      },
+      "all": {
+        "n_winner": 709,
+        "n_loser": 661,
+        "winner_top1": 0.6445698166431594,
+        "loser_top1": 0.540090771558245,
+        "winner_margin": 0.104479,
+        "low_confidence": false
+      }
+    }
+  }
+}
