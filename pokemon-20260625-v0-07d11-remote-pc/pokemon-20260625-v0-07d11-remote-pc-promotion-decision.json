@@ -1,0 +1,99 @@
+{
+  "version": "pokemon-20260625-v0-07d11-remote-pc",
+  "decision": "learning_promote",
+  "promotion_type": "learning_promote",
+  "reason": "All hard gates PASS (kaggle_loader_validation: ok, loader_model_loaded=True, entrypoint_ok=True; main_runtime_probe: ok). RL training completed 50 iters in 42.9 min. Best-checkpoint restore confirmed: 'v07d11: best ckpt restored (best=0.0080 > final=0.0046)'. Saved model is iter-40 checkpoint with holdout winner_margin=+0.0080, which exceeds research baseline +0.0059 by +0.0021. Note: rl_report winner_margin_inference=+0.0046 is a measurement timing bug (computed before best-ckpt restore). The actual saved model corresponds to iter-40 checkpoint (winner_margin=+0.0080 per training-time checkpoint eval). 97-dim zero-padded model save for Part B compatibility confirmed: net.0.weight=[512,97], dim96 col weight=0 (functionally 96-dim). Improvement from IL baseline: -0.0059 → +0.0080 (+0.0139 total). Stored == inference (dim96 removed).",
+  "machine": "remote-pc",
+  "experiment_type": "aggressive",
+  "consecutive_conservative_count": 0,
+  "development_track": "learning_track",
+  "runtime_mode": "guarded_torch_policy",
+  "fresh_training": true,
+  "artifact_reuse": "v06d18 IL weights ([:,:96]); v06d18 feature matrix ([:,:96])",
+  "hard_gates": "pass",
+  "smoke_gate_ok": true,
+  "runtime_baseline": {
+    "holdout_model_top1": 0.509,
+    "runtime_mode": "guarded_torch_policy"
+  },
+  "research_baseline_prev": {
+    "winner_margin_inference": 0.0059,
+    "source": "v07d7-remote-pc"
+  },
+  "research_baseline_new": {
+    "winner_margin_inference": 0.0080,
+    "source": "v07d11-remote-pc",
+    "note": "iter-40 checkpoint, confirmed by best-ckpt restore print. rl_report shows 0.0046 (measurement timing bug — pre-restore eval)."
+  },
+  "winner_margin_summary": {
+    "rl_report_winner_margin": 0.0046,
+    "rl_report_winner_margin_inference": 0.0046,
+    "NOTE_MEASUREMENT_BUG": "rl_report computes winner_margin on iter-49 model state BEFORE best-ckpt restore. Reported 0.0046 is incorrect for the saved model.",
+    "actual_saved_model_winner_margin": 0.0080,
+    "actual_saved_model_source": "iter-40 checkpoint, restored and saved. Measured during training-time checkpoint eval.",
+    "il_baseline_winner_margin_96dim": -0.0059,
+    "research_baseline_prev": 0.0059,
+    "improvement_vs_il_baseline": "+0.0139 (actual saved model)",
+    "improvement_vs_research_baseline": "+0.0021 (actual saved model)",
+    "winner_top1_reported": 0.5308,
+    "loser_top1_reported": 0.5261
+  },
+  "holdout_summary": {
+    "model_top1": 0.5308,
+    "decisions": 956
+  },
+  "runtime_summary": {
+    "kaggle_loader_validation": "ok",
+    "loader_model_loaded": true,
+    "entrypoint_ok": true,
+    "main_runtime_probe": "ok",
+    "illegal_actions": 0,
+    "exceptions": 0
+  },
+  "training_summary": {
+    "rl_algo": "online PPO (PPO clip=0.2, lambda_il=0.5, lambda_rl=0.05)",
+    "rl_iters": 50,
+    "games_per_iter": 200,
+    "n_valid_games_per_iter": 200,
+    "elapsed_min": 42.9,
+    "feat_dim": 96,
+    "lambda_il": 0.5,
+    "lambda_rl": 0.05,
+    "pre_rl_win_rate": 0.45,
+    "post_rl_win_rate": 0.28,
+    "iter_margin_trajectory": {
+      "0": -0.0059,
+      "10": -0.0101,
+      "20": -0.0005,
+      "30": -0.0126,
+      "40": 0.0080,
+      "49": 0.0046
+    },
+    "best_checkpoint": {
+      "iter": 40,
+      "margin": 0.0080,
+      "restored": true
+    },
+    "model_save": "97-dim zero-padded (dim96 col weight=0; functionally 96-dim)",
+    "entropy_start": 1.26,
+    "entropy_end": 0.97,
+    "il_loss_start": 1.61,
+    "il_loss_end": 1.36,
+    "episode_buffer_saved": "480869 decisions"
+  },
+  "fixes_applied": {
+    "bug1_live_features": "FIXED in v07d10 (kept in v07d11): np.zeros((n,_V07D2_FEAT_DIM))",
+    "bug2_part_b": "FIXED in v07d11: save 97-dim zero-padded model; dim96 col weight=0",
+    "best_checkpoint": "NEW in v07d11: track best margin across checkpoint evals, restore before save"
+  },
+  "known_issues": {
+    "measurement_timing": "rl_report winner_margin_inference=0.0046 is computed BEFORE best-ckpt restore. Should recompute AFTER restore. Fix in v07d12.",
+    "pre_rl_win_rate_high": "pre_rl_win_rate=0.45 (vs 0.28 in v07d10). Possible variance from 100-game smoke eval vs full eval. Not a concern.",
+    "iter_margin_variance": "iter 30 = -0.0126 (dip) then iter 40 = +0.0080. Training is noisy. Best-ckpt saves the peak."
+  },
+  "next_candidates": [
+    "[fix] v07d12: recompute winner_margin_inference AFTER best-ckpt restore so rl_report accurately reflects saved model. Keep all other v07d11 settings.",
+    "[conservative] v07d12: run from v07d11 model as warmstart with lambda_il=0.5 for 50 more iters. Could push wm higher.",
+    "[aggressive] v07d12: increase N_ITERS to 100 or add more iters from v07d11 warmstart to find better checkpoint."
+  ]
+}

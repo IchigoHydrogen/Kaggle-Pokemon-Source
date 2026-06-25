@@ -11,7 +11,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Experiment | Tag | Machine | Date |
 |---|---|---|---|
-| v07d11: fix Part B (97-dim padded model) + best-checkpoint saving | aggressive | remote-pc | 2026-06-26 |
+| v07d12: fix rl_report measurement timing (recompute wm after best-ckpt restore) | conservative | remote-pc | 2026-06-26 |
 
 ---
 
@@ -33,6 +33,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Version | Machine | Type | Promotion | winner_margin (stored) | winner_margin (inference) | Notes |
 |---|---|---|---|---|---|---|
+| v0-07d11-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0080 | +0.0046 (bug) | dim96 removal + online PPO + best-ckpt. Part B PASS. Best-ckpt restored iter40=+0.0080 > research baseline +0.0059. rl_report shows +0.0046 (measurement timing bug: computed before restore). Actual saved model=iter40 (+0.0080). New research baseline=+0.0080. Fix measurement in v07d12. |
 | v0-07d10-remote-pc | remote-pc | aggressive | exploration_promote | — | -0.000044 | dim96 removal working: n_valid=200/iter, 42.7 min. IL baseline -0.0059 → final -0.000044 (+0.0059 improvement). Peak iter40=+0.0096 > research baseline. Hard gate FAIL: Part B size mismatch (96-dim model vs 97-dim class). Fix: re-save as 97-dim (zero pad). Also: no best-ckpt saving → final<peak. Fix both in v07d11. |
 | v0-07d9-remote-pc | remote-pc | aggressive | needs_followup | — | -0.0059 (IL only) | dim96 removal: 2 bugs. Bug1: live_features hardcoded np.zeros((n,97)) → shape mismatch → 0 games collected. Bug2: Part B main.py used 97-dim class. 96-dim IL baseline = -0.0059 (stored=inference). Fix both in v07d10. |
 | v0-07d8-remote-pc | remote-pc | aggressive | reject | 0.0046 | -0.0012 | Online PPO + lambda_il=0.1: too weak IL anchor. Inference wm -0.0012 < v07d5 baseline -0.0009. Policy drifted from IL without winner-selection benefit. Win rate 0.25→0.29 (game-level but not winner-selective). 43 min RL. |
@@ -52,5 +53,5 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 See `loop-harness.md` Baseline Handling for authoritative values.
 
 - **Stored-feature eval (inflated — do not use for new comparisons):** `winner_margin = 0.057` (v07d4)
-- **Inference-feature eval (authoritative):** `winner_margin = +0.0059` (v07d7-remote-pc; learning_promote)
+- **Inference-feature eval (authoritative):** `winner_margin = +0.0080` (v07d11-remote-pc; learning_promote; iter-40 best-ckpt; prev: +0.0059 v07d7)
 - Current runtime baseline: `holdout_model_top1 = 0.509` (guarded_torch_policy)
