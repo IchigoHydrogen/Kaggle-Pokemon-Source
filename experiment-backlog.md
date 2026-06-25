@@ -11,7 +11,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Experiment | Tag | Machine | Date |
 |---|---|---|---|
-| (none) | | | |
+| v07d9: dim96 removal (97→96) + online PPO lambda_il=0.5 | aggressive | remote-pc | 2026-06-25 |
 
 ---
 
