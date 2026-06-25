@@ -1,0 +1,45 @@
+{
+  "version": "pokemon-20260623-v0-06d5",
+  "decision": "needs_followup",
+  "promotion_type": "diagnostic_regression_localization",
+  "hypothesis_B": "The v0-06d1 phase-aware tactical scoring layer is a strength regression versus v0-05d6.",
+  "hypothesis_B_result": "not_supported_locally",
+  "reason": "In a same-deck (byte-identical), seat-balanced head-to-head over 600 games with zero errors and zero illegal actions, v0-06d1 was marginally ahead of v0-05d6 (v0-06d1 win rate 0.537, Wilson 95% CI [0.497, 0.576]). The deck factor is ruled out and the tactical layer is not a same-deck-mirror strength regression. Therefore the local environment cannot currently reproduce the Kaggle regression the user observed for v0-06d3 (whose gameplay equals v0-06d1).",
+  "deck_factor": "ruled_out_byte_identical_across_v05d6_v06d1_v06d4",
+  "evidence": {
+    "v05d6_vs_v06d1": {"games": 600, "v05d6_wins": 278, "v06d1_wins": 322, "draws": 0,
+      "v06d1_win_rate": 0.537, "v06d1_wilson95": [0.497, 0.576], "errors": 0, "illegal": 0},
+    "v06d4_vs_v06d1": {"games": 600, "v06d4_wins": 318, "v06d1_wins": 282,
+      "v06d4_win_rate": 0.530, "v06d4_wilson95": [0.490, 0.570], "note": "CI includes 0.5: reranker does not meaningfully change head-to-head strength vs its own teacher"},
+    "v06d4_vs_v05d6": {"games": 600, "v06d4_wins": 312, "v05d6_wins": 288,
+      "v06d4_win_rate": 0.520, "v06d4_wilson95": [0.480, 0.560], "note": "CI includes 0.5"},
+    "saturation_non_discriminating": {
+      "v05d6_vs_random": [0.975, [0.929, 0.991]],
+      "v06d1_vs_random": [0.983, [0.941, 0.995]],
+      "v05d6_vs_first_valid": [0.933, [0.874, 0.966]],
+      "v06d1_vs_first_valid": [0.925, [0.864, 0.960]],
+      "note": "All weak-opponent win rates are high and CIs overlap; this axis cannot discriminate the two agents, confirming the v0-06 development metric was blind to strength."
+    }
+  },
+  "key_finding": "The Kaggle regression is NOT a same-deck mirror strength difference. The local toolchain (alakazam-mirror self-play + weak random/first_valid opponents) has no faithful representation of the Kaggle ladder, so it cannot measure the regression. Any version validated only on this axis (including hypothesis C) would repeat the v0-06 blind-metric mistake.",
+  "engine_note": "The cg engine RNG is not Python-seedable; identical deck order produced different outcomes. Reproducibility here is statistical (N=600, seat-balanced, Wilson CI), not exact.",
+  "implications_for_C": [
+    "Do NOT validate hypothesis C (teacher replacement) on the current local axis; build a discriminating opponent axis first.",
+    "Likely unmeasured causes of the Kaggle gap: (a) matchup coverage - local tests only the alakazam mirror while Kaggle has diverse opponent decks and the tactical layer has archetype-specific branches that only fire vs non-mirror opponents; (b) opponent strength - no faithful top200-style opponent locally; (c) the torch packaging/runtime in v0-06d3 itself (latency/overage/timeout differences on real Kaggle hardware).",
+    "Recommended next diagnostic before C: build diverse-matchup opponents from replay/log decklists and re-run v05d6 vs v06d1 across matchups to find where (if anywhere) v06d1 actually loses, then make that the C gate."
+  ],
+  "hard_gates": {
+    "harness_completed": true,
+    "errors": 0,
+    "illegal_action_count": 0,
+    "agent_edits": "none",
+    "submission_built": false,
+    "artifacts_prefixed_under_output_dir": true
+  },
+  "next_candidates": [
+    "Diverse-matchup head-to-head (v05d6 vs v06d1 across replay-derived opponent decks) to locate matchup-specific regression.",
+    "Replay/log-faithful opponent pool to create a discriminating local strength axis.",
+    "Quantify v0-06d3 torch runtime cost on a realistic budget before trusting the neural path.",
+    "Only after a discriminating axis exists: hypothesis C teacher replacement (replay action + outcome targets)."
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "version": "pokemon-20260623-v0-05d2",
+  "baseline": "pokemon-20260622-v0-05d1",
+  "decision": "promote",
+  "promotion_type": "operational_baseline",
+  "reason": "Artifact path recording and submission archive naming are now self-consistent. The full notebook executed successfully, all hard gates passed, and every absolute artifact path recorded in the run summary points to an existing file.",
+  "hard_gates": {
+    "notebook_full_execution": "pass",
+    "run_mode": "full",
+    "error_count": 0,
+    "errors_json_len": 0,
+    "local_eval_status": "ok",
+    "smoke_illegal_action_count": 0,
+    "missing_artifact_paths": 0,
+    "unprefixed_output_files": 0,
+    "submission_archives_prefixed": true,
+    "submission_archive_required_files_present": true,
+    "submission_archive_python_cache_files": 0
+  },
+  "baseline_comparison": {
+    "gameplay_change_intended": false,
+    "selected_deck_hash": {
+      "baseline": "e702674c1864",
+      "new": "e702674c1864"
+    },
+    "final_submission_variant_effective": {
+      "baseline": "unknown0_policy_table",
+      "new": "unknown0_policy_table"
+    },
+    "decision_rows": {
+      "baseline": 1494391,
+      "new": 1494391
+    },
+    "option_rows": {
+      "baseline": 8352193,
+      "new": 8352193
+    },
+    "smoke_eval": {
+      "baseline_win_rate": 1.0,
+      "new_win_rate": 1.0,
+      "baseline_illegal_actions": 0,
+      "new_illegal_actions": 0
+    },
+    "confirm_random_same_deck": {
+      "baseline_win_rate": 1.0,
+      "new_win_rate": 0.975,
+      "baseline_illegal_actions": 0,
+      "new_illegal_actions": 0,
+      "interpretation": "Not used as promotion evidence because v0-05d2 makes no gameplay changes and local eval has stochastic variation."
+    },
+    "confirm_first_valid_same_deck": {
+      "baseline_win_rate": 0.975,
+      "new_win_rate": 0.975,
+      "baseline_illegal_actions": 0,
+      "new_illegal_actions": 0
+    }
+  },
+  "known_risks": [
+    "This version should not be claimed as a gameplay improvement.",
+    "The current evaluation still lacks a deterministic holdout comparison harness.",
+    "UNKNOWN_0 policy table size varied across executions, likely due training or threshold nondeterminism; future gameplay changes need fixed split and seed diagnostics."
+  ],
+  "next_candidates": [
+    "Add deterministic episode split and holdout comparison artifact.",
+    "Tighten UNKNOWN_0 policy activation with support/margin stress checks.",
+    "Evaluate candidate deck alternatives with stronger local head-to-head tests."
+  ]
+}

@@ -1,0 +1,88 @@
+{
+  "version": "pokemon-20260623-v0-05d4",
+  "baseline": "pokemon-20260623-v0-05d3",
+  "decision": "promote",
+  "promotion_type": "safety_pruning_baseline",
+  "reason": "UNKNOWN_0 policy-table low-accuracy entries were pruned while hard safety gates remained clean. This is promoted as a conservative safety-pruning baseline, not as proven win-rate improvement.",
+  "hard_gates": {
+    "notebook_full_execution": "pass",
+    "run_mode": "full",
+    "error_count": 0,
+    "errors_json_len": 0,
+    "local_eval_status": "ok",
+    "smoke_illegal_action_count": 0,
+    "missing_artifact_paths": 0,
+    "submission_archives_prefixed": true,
+    "submission_archive_required_files_present": true,
+    "submission_archive_python_cache_files": 0
+  },
+  "unknown0_policy_pruning": {
+    "min_table_acc": 0.75,
+    "baseline_entries": 63,
+    "new_entries": 62,
+    "baseline_policy_decisions": 15971,
+    "new_policy_decisions": 15583,
+    "baseline_min_top_correct_rate": 0.6607142857142857,
+    "new_min_top_correct_rate": 0.75,
+    "new_mean_top_correct_rate": 0.8588262779580684,
+    "runtime_unknown0_policy_stats": {
+      "calls": 696,
+      "unknown0_context": 419,
+      "eligible": 419,
+      "key_hit": 1,
+      "signature_fallback_hit": 0,
+      "miss": 418,
+      "no_candidate": 0,
+      "selected": 1
+    }
+  },
+  "baseline_comparison": {
+    "gameplay_change_intended": true,
+    "selected_deck_hash": {
+      "baseline": "e702674c1864",
+      "new": "e702674c1864"
+    },
+    "final_submission_variant_effective": {
+      "baseline": "unknown0_policy_table",
+      "new": "unknown0_policy_table"
+    },
+    "decision_rows": {
+      "baseline": 1494391,
+      "new": 1494391
+    },
+    "option_rows": {
+      "baseline": 8352193,
+      "new": 8352193
+    },
+    "smoke_eval": {
+      "baseline_win_rate": 1.0,
+      "new_win_rate": 0.9375,
+      "baseline_illegal_actions": 0,
+      "new_illegal_actions": 0
+    },
+    "confirm_random_same_deck": {
+      "baseline_win_rate": 0.9,
+      "new_win_rate": 1.0,
+      "baseline_illegal_actions": 0,
+      "new_illegal_actions": 0,
+      "interpretation": "Not used as decisive promotion evidence because local eval is stochastic."
+    },
+    "confirm_first_valid_same_deck": {
+      "baseline_win_rate": 1.0,
+      "new_win_rate": 0.925,
+      "baseline_illegal_actions": 0,
+      "new_illegal_actions": 0
+    }
+  },
+  "known_risks": [
+    "This version is not proven to improve win rate.",
+    "Runtime UNKNOWN_0 policy hit rate in local smoke remains very low.",
+    "Split-aware UNKNOWN_0 holdout evaluation is still needed before more aggressive policy changes.",
+    "Local head-to-head evaluation seeds remain noisy."
+  ],
+  "next_candidates": [
+    "Add split-aware UNKNOWN_0 policy evaluation on holdout decisions.",
+    "Add deterministic local head-to-head evaluation seeds.",
+    "Tune UNKNOWN_0 table threshold further only after holdout policy evaluation exists."
+  ]
+}

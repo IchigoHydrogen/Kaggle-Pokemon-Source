@@ -1,0 +1,38 @@
+{
+  "version": "v0-06d12",
+  "run_prefix": "pokemon-20260624-v0-06d12",
+  "decision": "needs_followup",
+  "date": "2026-06-24",
+  "holdout_model_top1": 0.5095,
+  "holdout_hybrid_top1": 0.3102,
+  "v06d11_model_baseline": 0.509,
+  "v06d11_hybrid_baseline": 0.4507,
+  "selected_prob_threshold": 0.65,
+  "selected_margin_threshold": 0.0,
+  "safe_override_types": [
+    "PLAY",
+    "ATTACH",
+    "EVOLVE",
+    "RETREAT"
+  ],
+  "hard_veto_types": [
+    "ABILITY"
+  ],
+  "quality_ok": false,
+  "danger_gate_ok": true,
+  "attack_hybrid_delta_holdout": -0.0128,
+  "smoke_gate_ok": true,
+  "loader_entrypoint_ok": true,
+  "runtime_feature_crosscheck_passed": true,
+  "latency_p99_ms": 0.811,
+  "action_changes": 153,
+  "decisions_seen": 671,
+  "model_param_count": 345473,
+  "epochs_run": 0,
+  "training_skipped": true,
+  "model_reused_from": "run2_2026-06-24T06:57",
+  "reason": "quality_ok=False: holdout_hybrid_top1=0.31 < 0.44 gate. Root cause: danger gate (threshold -0.01) blocks prob=0.35 selection. At prob=0.35 with PLAY/ATTACH/EVOLVE/RETREAT, hybrid_top1=0.454 but danger_hybrid_delta=-0.060 on valid (ATTACK decisions hurt: model overrides ATTACK chosen decisions to PLAY, dropping ATTACK accuracy by -9.2%). attack_hybrid_delta at prob=0.35: -0.0921 < self-review gate -0.03. Cross-type contamination: model recommends PLAY over correct ATTACK choices. All other gates pass: smoke ok, loader ok, crosscheck ok.",
+  "model_training_verdict": "valid",
+  "hybrid_design_finding": "Need to gate on rule_option_type NOT IN [ATTACK,END] to prevent overriding correct ATTACK decisions. Type-specific thresholds or rule-type veto in v06d13.",
+  "next_step": "v06d13: Fix hybrid guard to veto override when rule chose ATTACK/END (check rule_type rather than model_top1_type for danger gate). Use prob=0.35 for PLAY/ATTACH/EVOLVE/RETREAT only. Keep CE loss and card metadata features."
+}

@@ -1,0 +1,21 @@
+{
+  "version": "pokemon-20260624-v0-06d10",
+  "decision": "runtime_promote",
+  "all_gates_ok": true,
+  "quality_ok": true,
+  "smoke_gate_ok": true,
+  "holdout_model_top1": 0.5027278238027885,
+  "holdout_hybrid_top1": 0.44662221324173235,
+  "v06d9_hybrid_baseline": 0.4454,
+  "holdout_hybrid_minus_v06d9": 0.0012222132417323284,
+  "best_epoch": 8,
+  "epochs_run": 14,
+  "best_valid_top1": 0.5043403400530885,
+  "torch_load_ok": true,
+  "illegal_actions": 0,
+  "exceptions": 0,
+  "latency_p99_ms": 0.5843644402193511,
+  "selected_prob_threshold": 0.35,
+  "selected_margin_threshold": 0.0,
+  "archive_path": "/kaggle/working/pokemon-20260624-v0-06d10-submission.tar.gz"
+}

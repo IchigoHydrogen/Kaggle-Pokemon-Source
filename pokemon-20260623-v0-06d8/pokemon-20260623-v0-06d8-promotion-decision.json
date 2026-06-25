@@ -1,0 +1,39 @@
+{
+  "version": "pokemon-20260623-v0-06d8",
+  "decision": "needs_followup",
+  "promotion_type": "fresh_main_guarded_hybrid_evaluation",
+  "reason": "guarded hybrid improves holdout with acceptable dangerous-bucket behavior; runtime probe can be considered next",
+  "hard_gates": {
+    "notebook_stage_status": "ok",
+    "submission_adoption": false,
+    "fresh_training": true,
+    "reuses_v0_06d7_weights_or_predictions": false,
+    "decisions": 101253,
+    "option_rows": 1278625,
+    "feature_dim": 96,
+    "rule_exceptions": 0,
+    "rule_bad_shape": 0,
+    "holdout_rule_top1": 0.18771468983633058,
+    "holdout_model_top1": 0.5011786892975012,
+    "holdout_model_top3": 0.7340203408095911,
+    "holdout_model_minus_rule_top1": 0.31346399946117065,
+    "selected_prob_threshold": 0.35,
+    "selected_margin_threshold": 0.0,
+    "holdout_hybrid_top1": 0.4457466154778743,
+    "holdout_hybrid_minus_rule_top1": 0.25803192564154376,
+    "holdout_override_rate": 0.6325183538762039,
+    "holdout_benefit_count": 4573,
+    "holdout_harm_count": 742,
+    "holdout_danger_hybrid_minus_rule": 0.0
+  },
+  "known_risks": [
+    "MAIN exact imitation is a proxy, not a ladder-strength proof.",
+    "The feature set is still compact and may learn shallow option priors.",
+    "Runtime adoption is intentionally deferred until a separate durability/latency guarded-runtime version."
+  ],
+  "next_candidates": [
+    "If hybrid is safe: build a guarded-runtime probe that only permits selected safe MAIN overrides.",
+    "If hybrid is not safe: improve features/calibration and keep ATTACK/END hard-vetoed.",
+    "Evaluate durability/latency before any torch submission adoption."
+  ]
+}

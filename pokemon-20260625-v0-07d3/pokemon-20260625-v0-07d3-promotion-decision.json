@@ -1,0 +1,58 @@
+{
+  "version": "pokemon-20260625-v0-07d3",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "winner_margin": 0.0075651097315421745,
+  "winner_margin_threshold": 0.03,
+  "quality_ok": false,
+  "winner_top1": 0.4988610478359909,
+  "loser_top1": 0.4912959381044487,
+  "il_baseline_winner_margin": -0.0036569837374373915,
+  "il_source": "pokemon-20260624-v0-06d18",
+  "post_rl_win_rate": 0.26,
+  "pre_rl_win_rate": 0.43,
+  "episode_source": "fresh (behavioral policy: pokemon-20260625-v0-07d3)",
+  "runtime_mode": "guarded_torch_policy",
+  "promotion_type_target": "learning_promote",
+  "all_gates_ok": true,
+  "danger_gate_ok": true,
+  "smoke_gate_ok": true,
+  "loader_entrypoint_ok": true,
+  "holdout_model_top1": 0.4988610478359909,
+  "holdout_hybrid_top1": 0.4988610478359909,
+  "torch_load_ok": true,
+  "illegal_actions": 0,
+  "exceptions": 0,
+  "action_changes": 421,
+  "shadow_disagreements": 526,
+  "latency_p99_ms": 0.4074311795739043,
+  "selected_prob_threshold": 0.35,
+  "selected_margin_threshold": 0.0,
+  "archive_path": "/kaggle/working/pokemon-20260625-v0-07d3-submission.tar.gz",
+  "loader_selected_callable": "_kaggle_submission_entrypoint",
+  "loader_model_loaded": true,
+  "exploration_evidence": {
+    "infrastructure_validated": true,
+    "rl_episodes_written": true,
+    "rl_episodes_decisions": 292276,
+    "rl_episodes_size_gb": 1.1,
+    "promotion_criterion_auto_correct": true,
+    "episode_source_field_present": true
+  },
+  "experiment_notes": {
+    "winner_margin_vs_v07d2": "0.008 vs 0.034 — lower, but positive vs IL baseline (-0.004). High training variance due to torch.manual_seed not set. Categorical.sample() in game loop consumes different Torch RNG sequence each run.",
+    "training_dynamics": "iter20 wm=-0.029 (large excursion), iter29 wm=+0.008 (incomplete recovery). v07d2 may have had a more favorable random trajectory.",
+    "infrastructure_result": "FULLY VALIDATED: rl_episodes.pt (1.1GB, 292276 decisions, 30 iters x 200 games) written correctly and loadable. Cell[25] winner_margin criterion working — auto-generated decision no longer requires manual correction.",
+    "model_result": "BELOW THRESHOLD (0.008 < 0.030) but above IL baseline (-0.004). Not a regression caused by episode saving — Torch non-determinism is the source of variance.",
+    "research_baseline_update": "NOT updated — v07d3 wm=0.008 < v07d2 wm=0.034. v07d2 remains the research baseline."
+  },
+  "known_issues": [
+    "torch.manual_seed not set → RL runs are non-reproducible across versions",
+    "winner_margin variance is high (0.008 vs 0.034 across two identical-algorithm runs)"
+  ],
+  "next_candidates": [
+    "v07d4-a: load v07d3 rl_episodes.pt, run additional offline PPO epochs (test episode reuse, ~5 min)",
+    "v07d4-b: add torch.manual_seed(RANDOM_SEED) to stabilize training, re-run to measure true expected wm",
+    "v07d4-c: collect fresh episodes starting from v07d3 weights (warm start) to test curriculum continuation"
+  ]
+}

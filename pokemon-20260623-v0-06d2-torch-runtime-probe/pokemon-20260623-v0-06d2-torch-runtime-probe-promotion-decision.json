@@ -1,0 +1,41 @@
+{
+  "version": "pokemon-20260623-v0-06d2-torch-runtime-probe",
+  "baseline": "pokemon-20260623-v0-06d1",
+  "decision": "promote",
+  "promotion_type": "direct_torch_runtime_feasible",
+  "reason": "A production-form archive with main.py importing torch and loading a 329,089-parameter model ran 96 local games with zero errors and zero illegal actions. Per-call latency was far below candidate actTimeout values and estimated overage consumption was zero for 0.25s, 0.5s, 1.0s, 2.0s, and 3.0s thresholds.",
+  "hard_gates": {
+    "param_count": 329089,
+    "archive_size_bytes": 2285642,
+    "archive_missing_required": [],
+    "torch_imported": true,
+    "games": 96,
+    "errors": 0,
+    "illegal_action_count": 0,
+    "import_seconds_max": 0.0225596480013337,
+    "act_latency_p99": 0.0007707157817640111,
+    "act_latency_max": 0.004081154002051335,
+    "timed_agent_calls": 5850,
+    "options_scored": 43393,
+    "overage_0_25s": 0.0,
+    "overage_1_0s": 0.0,
+    "latency_parquet_written": true
+  },
+  "baseline_comparison": {
+    "v0_06d1_torch_in_runtime": false,
+    "v0_06d2_torch_in_runtime": true,
+    "v0_06d2_model_file_packaged": true,
+    "gameplay_claim": "none; random-weight probe does not alter decisions intentionally"
+  },
+  "known_risks": [
+    "This only proves runtime feasibility for one 329k-parameter CPU MLP shape, not every 500k-parameter architecture.",
+    "The model is random and does not test policy quality.",
+    "Kaggle production hardware and loaded libraries can differ from local Docker, so a guardrail using remainingOverageTime is still prudent.",
+    "A real model may need more expensive feature extraction than this probe."
+  ],
+  "next_candidates": [
+    "Train a real context-specific PyTorch reranker and test it behind a runtime feature flag.",
+    "Add remainingOverageTime-aware fallback to rule-only when timing budget is low.",
+    "Benchmark a near-500k model and a batched all-context model before replacing rule scores."
+  ]
+}
