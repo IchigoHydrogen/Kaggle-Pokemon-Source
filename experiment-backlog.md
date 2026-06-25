@@ -11,7 +11,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Experiment | Tag | Machine | Date |
 |---|---|---|---|
-| Full pipeline with episodes-06-24 + Cell[25] fix + seed + dual eval + 30-iter online RL (v07d5-remote-pc) | conservative | remote-pc | 2026-06-25 |
+| (none) | | | |
 
 ---
 
@@ -19,26 +19,26 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | # | Experiment | Tag | Notes |
 |---|---|---|---|
-| 1 | Fix Cell[25] SKIP_PIPELINE incompatibility: move `import_agent_from_source` to Cell[3]; re-run v07d4 offline PPO path to confirm `learning_promote` with smoke gate passing | conservative | Blocker for v07d4 `learning_promote`. Fast run (SKIP_PIPELINE=True, 8 offline epochs, ~30 min). |
-| 2 | Add `torch.manual_seed(RANDOM_SEED)` to RL training; re-run 30-iter online PPO from v07d2 baseline to measure true expected winner_margin with reproducibility | conservative | v07d3 vs v07d2 variance (0.008 vs 0.034) is Torch RNG. Seed first before any HPO. |
-| 3 | Fresh episode collection from v07d4 weights (warm-start); run K_OFFLINE=4 offline epochs | conservative | v07d3 episodes are behavioral=v07d3; v07d4 has drifted. Fresh data should improve offline training quality. |
-| 4 | Speed up offline PPO inner loop: replace Python `for row in episodes` with numpy batch pre-concat to GPU | conservative | 8 offline epochs on 292k decisions takes ~30 min. Bottleneck is Python data loop, not GPU. |
-| 5 | New RL algorithm: REINFORCE with moving-average baseline (replace PPO) | aggressive | PPO clip may suppress learning on stale episodes. REINFORCE has no clip — higher variance but no staleness penalty. |
-| 6 | Feature expansion: add opponent-hand-size and energy-in-play signals to the 97-dim feature vector | aggressive | Current features may be missing key board-state signals. Feature dim change requires fresh episode collection. |
-| 7 | Architecture change: option-wise attention (score each legal option against a board context vector) instead of flat MLP | aggressive | Flat MLP treats each option independently. Attention can model relative option quality. |
-| 8 | Reward shaping: add dense intermediate reward based on prize-card differential change per step | aggressive | Current reward is sparse (prize cards at end). Dense shaping could accelerate RL convergence. |
+| 1 | REINFORCE with moving-average baseline (replace PPO) + reduce lambda_il to 0.5 | aggressive | v07d5 showed win_rate collapse 0.59→0.26 under PPO+lambda_il=1.0. REINFORCE has no clip; larger updates. Primary metric: inference-feature winner_margin. |
+| 2 | Offline PPO on large fresh episode buffer with inference-feature eval as primary metric | conservative | Re-establish calibrated baseline. v07d4 0.057 was inflated. Need offline PPO with dim96 leakage removed to get true episodic learning signal. |
+| 3 | Reduce lambda_il from 1.0 to 0.1 in online RL; monitor win_rate recovery | conservative | lambda_il=1.0 suppresses RL signal too strongly. Lower anchor allows RL to drive actual game wins. |
+| 4 | Remove dim96 from feature vector; retrain IL from scratch | aggressive | dim96 is unavailable at true inference (win-label leakage). Dropping it removes the inflation source and forces the model to learn from genuine board features. |
+| 5 | Feature expansion: add opponent-hand-size and energy-in-play signals to the 97-dim feature vector | aggressive | Current features may be missing key board-state signals. Feature dim change requires fresh episode collection. |
+| 6 | Architecture change: option-wise attention (score each legal option against a board context vector) instead of flat MLP | aggressive | Flat MLP treats each option independently. Attention can model relative option quality. |
+| 7 | Reward shaping: add dense intermediate reward based on prize-card differential change per step | aggressive | Current reward is sparse (prize cards at end). Dense shaping could accelerate RL convergence. |
 
 ---
 
 ## Completed (recent)
 
-| Version | Machine | Type | Promotion | winner_margin | Notes |
-|---|---|---|---|---|---|
-| v0-07d4 | ei | conservative | exploration_promote | 0.057 | Offline PPO on v07d3 episodes (8 epochs). Smoke gate not confirmed (SKIP_PIPELINE + import_agent_from_source bug). |
-| v0-07d3 | ei | conservative | exploration_promote | 0.008 | Episode saving infra validated. rl_episodes.pt (292k decisions, 1.1 GB). Torch seed variance (was 0.034 in v07d2). |
-| v0-07d2 | ei | conservative | exploration_promote | 0.034 | Hybrid IL+RL (λ_il=1.0, λ_rl=0.05). First working RL version. Manual promotion. |
-| v0-07d1 | ei | aggressive | reject | n/a | PPO RL only (no IL anchor). win_rate=0.375. winner_margin not measured. |
-| v0-06d18 | ei | conservative | learning_promote | -0.004 | IL baseline (97-dim features + MLP reranker). Runtime baseline holdout_top1=0.509. |
+| Version | Machine | Type | Promotion | winner_margin (stored) | winner_margin (inference) | Notes |
+|---|---|---|---|---|---|---|
+| v0-07d5-remote-pc | remote-pc | conservative | exploration_promote | 0.0068 | -0.0009 | CRITICAL: dim96 leakage confirmed. Inference margin near-zero. All prior stored margins inflated. Smoke gate confirmed. 31 min on RTX4090. |
+| v0-07d4 | ei | conservative | exploration_promote | 0.057 | n/a (not measured) | Offline PPO on v07d3 episodes (8 epochs). Stored margin inflated by dim96. Smoke gate not confirmed. |
+| v0-07d3 | ei | conservative | exploration_promote | 0.008 | n/a | Episode saving infra. Torch seed variance. |
+| v0-07d2 | ei | conservative | exploration_promote | 0.034 | n/a | Hybrid IL+RL first working version. |
+| v0-07d1 | ei | aggressive | reject | n/a | n/a | PPO only (no IL anchor). |
+| v0-06d18 | ei | conservative | learning_promote | -0.004 | n/a | IL baseline. Runtime baseline holdout_top1=0.509. |
 
 ---
 
@@ -46,5 +46,6 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 See `loop-harness.md` Baseline Handling for authoritative values.
 
-- Current research baseline: `winner_margin = 0.057` (v07d4, stored-feature eval)
+- **Stored-feature eval (inflated — do not use for new comparisons):** `winner_margin = 0.057` (v07d4)
+- **Inference-feature eval (authoritative):** `winner_margin ≈ -0.001` (v07d5-remote-pc; near-zero)
 - Current runtime baseline: `holdout_model_top1 = 0.509` (guarded_torch_policy)

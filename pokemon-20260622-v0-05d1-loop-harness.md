@@ -338,17 +338,26 @@ runtime_mode:       guarded_torch_policy
 ### Research Baseline
 
 ```text
-winner_margin (holdout, stored-feature eval):  0.057
-holdout_winner_top1:                           0.478
-holdout_loser_top1:                            0.422
-il_baseline_winner_margin:                    -0.004
-feature_dim: 97
-evaluation_note: "stored-feature" eval preserves dim 96 from the training feature matrix
-  (1.0 for winner decisions, 0.0 for loser decisions).
-source_note: offline PPO on saved episodes. Smoke gate not confirmed due to
-  SKIP_PIPELINE + Cell[25] incompatibility (import_agent_from_source missing from Cell[3]).
-  Model quality metric is valid; submission packaging pending fix.
+PRIMARY METRIC (use for all new comparisons):
+  evaluation_mode:              inference-feature eval (dim96=1.0 for ALL decisions)
+  winner_margin (inference):    -0.001  (v07d5-remote-pc; near-zero — true policy advantage)
+  holdout_winner_top1:           0.519
+  holdout_loser_top1:            0.520
+
+DIAGNOSTIC ONLY — stored-feature eval (inflated, do not promote against):
+  winner_margin (stored):       0.057  (v07d4)
+  holdout_winner_top1:          0.478
+  holdout_loser_top1:           0.422
+  inflation_note: dim96 is set 1.0 for winners / 0.0 for losers in stored training features,
+    causing systematic winner-side advantage. At inference dim96=1.0 for all, removing the signal.
+    All v07d2-v07d4 stored-feature margins were inflated by this leakage.
+
+il_baseline_winner_margin (IL only, inference eval): -0.004
+feature_dim: 97 (dim96 = return-condition; present but inflated in stored eval)
 ```
+
+**Policy from v07d5 onward:** `winner_margin` in promotion criteria refers to **inference-feature eval**.
+Stored-feature eval may still be reported diagnostically but cannot be the promotion signal.
 
 When updating after `learning_promote` or `runtime_promote`, replace only the metric block above.
 
