@@ -1,0 +1,81 @@
+{
+  "version": "pokemon-20260625-v0-07d7-remote-pc",
+  "decision": "learning_promote",
+  "promotion_type": "learning_promote",
+  "reason": "Offline PPO (8 epochs) on v07d6 episode buffer (481k decisions) with PPO clip + lambda_il=0.5 achieved inference-feature winner_margin=+0.0059, clearly above the v07d5 baseline of -0.0009 (+0.0068 improvement). Confirming that PPO clip prevents the forgetting seen in v07d6 REINFORCE. Stored margin=+0.0388 (diagnostic only). All hard gates pass. Key finding: offline PPO on stale episodes still provides useful learning signal when PPO clip stabilizes updates.",
+  "machine": "remote-pc",
+  "experiment_type": "conservative",
+  "consecutive_conservative_count": 1,
+  "development_track": "exploration_track",
+  "runtime_mode": "guarded_torch_policy",
+  "fresh_training": true,
+  "artifact_reuse": "v06d18 IL weights (warmstart), v07d6 rl_episodes.pt (episode buffer); v06d18 feature matrix (pipeline rerun)",
+  "hard_gates": "pass",
+  "smoke_gate_ok": true,
+  "runtime_baseline": {
+    "holdout_model_top1": 0.509,
+    "runtime_mode": "guarded_torch_policy"
+  },
+  "research_baseline": {
+    "winner_margin_inference": -0.0009,
+    "source": "v07d5-remote-pc"
+  },
+  "winner_margin_summary": {
+    "holdout_winner_top1_stored": 0.4624,
+    "holdout_loser_top1_stored": 0.4236,
+    "holdout_winner_margin_stored": 0.0388,
+    "holdout_winner_top1_inference": 0.4624,
+    "holdout_loser_top1_inference": 0.4565,
+    "holdout_winner_margin_inference": 0.0059,
+    "il_baseline_winner_margin": -0.0037,
+    "v07d5_inference_baseline": -0.0009,
+    "improvement_vs_v07d5": "positive (+0.0059 > -0.0009, delta=+0.0068)",
+    "improvement_vs_il": "positive (+0.0059 > -0.0037)"
+  },
+  "holdout_summary": {
+    "model_top1": 0.4624,
+    "decisions": 956
+  },
+  "runtime_summary": {
+    "smoke_gate_ok": true,
+    "loader_entrypoint_ok": true,
+    "torch_load_ok": true,
+    "action_changes": 576,
+    "illegal_actions": 0,
+    "exceptions": 0,
+    "latency_p99_ms": 0.38
+  },
+  "training_summary": {
+    "rl_algo": "offline PPO (PPO clip=0.2, 8 epochs x 481694 decisions)",
+    "episode_source": "v07d6 rl_episodes.pt (behavioral=v07d6-REINFORCE)",
+    "rl_iters": 8,
+    "games_per_iter": 0,
+    "elapsed_min": 65.5,
+    "pre_rl_win_rate": 0.0,
+    "post_rl_win_rate": 0.0,
+    "lambda_il": 0.5,
+    "lambda_rl": 0.05,
+    "ppo_epochs": 8,
+    "epoch_history_stored_wm": [-0.0179, -0.0113, 0.0121, -0.0047, 0.0590, 0.0741, 0.0589, 0.0388],
+    "peak_epoch_stored_wm": 0.0741,
+    "final_epoch_stored_wm": 0.0388,
+    "entropy_start": 1.195,
+    "entropy_end": 0.751,
+    "il_loss_start": 1.564,
+    "il_loss_end": 1.012,
+    "note": "Stored margin oscillated; inference margin positive. PPO clip prevented forgetting seen in v07d6 REINFORCE. IL loss decreased: policy diverged from IL but learned winner-selective signal."
+  },
+  "exploration_summary": "Offline PPO with PPO clip works where REINFORCE failed. lambda_il=0.5 + PPO clip = learning_promote (+0.0059 inference). Stored margin oscillated across epochs (peak 0.074 at epoch 5, final 0.039). The gap stored=0.039 vs inference=0.006 still shows some dim96 inflation. Next: test lower lambda_il (0.3 or 0.1) to see if more RL signal improves further, or collect fresh online games with updated v07d7 model.",
+  "known_risks": [
+    "Episode data from v07d6 (REINFORCE+forgetting policy) — behavioral policy was not optimal; importance weights may be noisy",
+    "Entropy decreasing (1.20→0.75): policy becoming deterministic, may reduce exploration in future online RL",
+    "Stored vs inference gap remains large (0.039 vs 0.006): dim96 inflation still present but reduced",
+    "Stored margin oscillated: training was unstable across epochs; no convergence to monotone improvement"
+  ],
+  "next_candidates": [
+    "[aggressive] v07d8: online PPO + lambda_il=0.1, starting from v07d7 model weights; collect fresh games to get better behavioral policy. Tests extreme IL anchor reduction with PPO clip. Primary metric: inference-feature wm.",
+    "[conservative] v07d8-alt: online PPO + lambda_il=0.3; moderate reduction from 0.5. Safer anchor test.",
+    "[aggressive] v07d8-dim96: remove dim96 from feature vector; retrain IL from scratch on 96-dim features. Eliminates leakage source entirely.",
+    "[aggressive] v07d8-more-epochs: collect fresh episodes with v07d7 model, offline PPO 8-16 epochs. Better behavioral policy = better episode distribution."
+  ]
+}

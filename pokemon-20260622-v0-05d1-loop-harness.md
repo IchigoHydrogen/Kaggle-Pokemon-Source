@@ -340,9 +340,9 @@ runtime_mode:       guarded_torch_policy
 ```text
 PRIMARY METRIC (use for all new comparisons):
   evaluation_mode:              inference-feature eval (dim96=1.0 for ALL decisions)
-  winner_margin (inference):    -0.001  (v07d5-remote-pc; near-zero — true policy advantage)
-  holdout_winner_top1:           0.519
-  holdout_loser_top1:            0.520
+  winner_margin (inference):    +0.006  (v07d7-remote-pc; learning_promote)
+  holdout_winner_top1:           0.462
+  holdout_loser_top1:            0.456
 
 DIAGNOSTIC ONLY — stored-feature eval (inflated, do not promote against):
   winner_margin (stored):       0.057  (v07d4)
