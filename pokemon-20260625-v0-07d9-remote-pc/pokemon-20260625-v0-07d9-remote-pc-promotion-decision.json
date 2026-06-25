@@ -1,0 +1,59 @@
+{
+  "version": "pokemon-20260625-v0-07d9-remote-pc",
+  "decision": "needs_followup",
+  "promotion_type": "needs_followup",
+  "reason": "Two bugs prevented valid RL training and hard gate evaluation. Bug 1: _v07d2_live_features used hardcoded np.zeros((n,97)) instead of _V07D2_FEAT_DIM=96, causing silent shape-mismatch exception in all 200 games/iter (97-dim array vs 96-dim model). All n_valid_games=0. Bug 2: pipeline-generated main.py used 97-dim _V06D15MainScorer; Part B loader check failed (size mismatch net.0.weight [512,96] vs expected [512,97]). IL baseline evaluation completed successfully on 96-dim features: wm_96dim_il=-0.0059 (wt1=0.538, lt1=0.544). Hard gate: FAIL (Part B). Both bugs identified and fixable in v07d10.",
+  "machine": "remote-pc",
+  "experiment_type": "aggressive",
+  "consecutive_conservative_count": 0,
+  "development_track": "exploration_track",
+  "runtime_mode": "guarded_torch_policy",
+  "fresh_training": true,
+  "artifact_reuse": "v06d18 IL weights (truncated [:,:96]); v06d18 feature matrix (loaded, [:,:96] sliced)",
+  "hard_gates": "fail",
+  "smoke_gate_ok": false,
+  "runtime_baseline": {
+    "holdout_model_top1": 0.509,
+    "runtime_mode": "guarded_torch_policy"
+  },
+  "research_baseline": {
+    "winner_margin_inference": 0.0059,
+    "source": "v07d7-remote-pc"
+  },
+  "winner_margin_summary": {
+    "holdout_winner_top1_stored": 0.5376,
+    "holdout_loser_top1_stored": 0.5435,
+    "holdout_winner_margin_stored": -0.0059,
+    "holdout_winner_top1_inference": 0.5376,
+    "holdout_loser_top1_inference": 0.5435,
+    "holdout_winner_margin_inference": -0.0059,
+    "il_baseline_winner_margin_96dim": -0.0059,
+    "note": "No RL training occurred (0 valid games). Margin is pure 96-dim IL baseline. stored == inference (no dim96 distinction after fix). Compare with 97-dim IL baseline: -0.0037."
+  },
+  "holdout_summary": {
+    "model_top1": "not computed (no RL model)",
+    "decisions": 956
+  },
+  "training_summary": {
+    "rl_algo": "online PPO (bug: live_features returned 97-dim, model expected 96-dim)",
+    "bug_1": "_v07d2_live_features: np.zeros((n,97)) hardcoded (not _V07D2_FEAT_DIM). All model calls threw RuntimeError, caught silently. Fix: use _V07D2_FEAT_DIM in zeros() calls.",
+    "bug_2": "Part B main.py: pipeline generates _V06D15MainScorer with Linear(97,512). v07d9 model is 96-dim. Fix: patch main.py in Cell[23] after RL training (replace Linear(97 with Linear(96, remove X[:,96]=1.0).",
+    "rl_iters": 50,
+    "games_per_iter": 200,
+    "n_valid_games_all_iters": 0,
+    "n_main_decisions_all_iters": 0,
+    "elapsed_min": 0.32,
+    "lambda_il": 0.5,
+    "feat_dim": 96
+  },
+  "exploration_summary": "dim96 removal confirmed to change IL baseline: 96-dim IL wm=-0.0059 vs 97-dim IL wm=-0.0037. The dim96 leakage was helping IL discrimination slightly. After dim96 removal, stored==inference eval (no more distinction needed). Both bugs in v07d9 are easily fixable. v07d10 should apply the two fixes and re-run the experiment.",
+  "known_risks": [
+    "96-dim IL baseline (-0.0059) is slightly worse than 97-dim IL baseline (-0.0037): removing dim96 leakage reduces IL's discriminative shortcut",
+    "Part B main.py needs patching for every future 96-dim version until the pipeline itself is updated",
+    "The 96-dim winner_margin (-0.0059) is the new honest baseline for future 96-dim experiments"
+  ],
+  "next_candidates": [
+    "[aggressive] v07d10: fix 2 bugs (live_features 97→96, patch main.py for 96-dim) and re-run dim96 removal + online PPO lambda_il=0.5. Same hypothesis, correct implementation.",
+    "[conservative] v07d10-alt: revert to 97-dim but fix evaluation (set dim96=1.0 for all in training data) — simpler fix, keeps 97-dim architecture"
+  ]
+}

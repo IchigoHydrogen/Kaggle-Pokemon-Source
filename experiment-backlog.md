@@ -11,7 +11,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Experiment | Tag | Machine | Date |
 |---|---|---|---|
-| v07d9: dim96 removal (97→96) + online PPO lambda_il=0.5 | aggressive | remote-pc | 2026-06-25 |
+| v07d10: fix v07d9 bugs (live_features 96-dim + main.py patch) + re-run | aggressive | remote-pc | 2026-06-25 |
 
 ---
 
@@ -33,6 +33,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Version | Machine | Type | Promotion | winner_margin (stored) | winner_margin (inference) | Notes |
 |---|---|---|---|---|---|---|
+| v0-07d9-remote-pc | remote-pc | aggressive | needs_followup | — | -0.0059 (IL only) | dim96 removal: 2 bugs. Bug1: live_features hardcoded np.zeros((n,97)) → shape mismatch → 0 games collected. Bug2: Part B main.py used 97-dim class. 96-dim IL baseline = -0.0059 (stored=inference). Fix both in v07d10. |
 | v0-07d8-remote-pc | remote-pc | aggressive | reject | 0.0046 | -0.0012 | Online PPO + lambda_il=0.1: too weak IL anchor. Inference wm -0.0012 < v07d5 baseline -0.0009. Policy drifted from IL without winner-selection benefit. Win rate 0.25→0.29 (game-level but not winner-selective). 43 min RL. |
 | v0-07d7-remote-pc | remote-pc | conservative | **learning_promote** | 0.0388 | **+0.0059** | Offline PPO (8 epochs x 481k decisions from v07d6). PPO clip prevented forgetting (REINFORCE failed). inference wm +0.0059 > baseline -0.0009 (+0.0068 improvement). All gates pass. 90 min total (65 min RL). |
 | v0-07d6-remote-pc | remote-pc | aggressive | reject | -0.0147 | -0.0186 | REINFORCE+lambda_il=0.5: forgetting (IL base=-0.0037 → post-RL=-0.0147). High-variance REINFORCE + weak anchor drove policy away from IL. Gates pass. 25 min (50 iters, smoke env var didn't reach kernel). |
