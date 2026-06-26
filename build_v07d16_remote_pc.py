@@ -47,8 +47,14 @@ src1 = src1.replace(
     "RUN_PREFIX = os.environ.get('V07D15_RUN_PREFIX', 'pokemon-20260625-v0-07d15-remote-pc')",
     "RUN_PREFIX = os.environ.get('V07D16_RUN_PREFIX', 'pokemon-20260625-v0-07d16-remote-pc')"
 )
+# v07d16: allow smoke test to skip pipeline via SKIP_PIPELINE=1 env var
+src1 = src1.replace(
+    "SKIP_PIPELINE      = False          # v07d5: full pipeline with episodes-06-24",
+    "SKIP_PIPELINE      = os.environ.get('SKIP_PIPELINE', 'false').lower() in ('true', '1')  # v07d16: configurable"
+)
 assert 'v0_07d16_il_weighted_1000iter' in src1, 'EXPERIMENT_NAME'
 assert 'v0-07d16-remote-pc' in src1, 'RUN_PREFIX'
+assert 'SKIP_PIPELINE' in src1 and 'os.environ.get' in src1, 'SKIP_PIPELINE env var'
 cells[1]['source'] = src1.splitlines(keepends=True)
 
 # ── Cell[23]: RL training ─────────────────────────────────────────────────────
@@ -164,10 +170,14 @@ src23 = src23.replace(
 
 cells[23]['source'] = src23.splitlines(keepends=True)
 
-# ── Clear outputs ─────────────────────────────────────────────────────────────
+# ── Clear outputs (code cells only — markdown cells must NOT have these fields) ──
 for c in cells:
-    c['outputs'] = []
-    c['execution_count'] = None
+    if c.get('cell_type') == 'code':
+        c['outputs'] = []
+        c['execution_count'] = None
+    else:
+        c.pop('outputs', None)
+        c.pop('execution_count', None)
 
 with open(DST, 'w') as f:
     json.dump(nb, f, ensure_ascii=False, indent=1)
@@ -182,6 +192,7 @@ s23 = ''.join(nb2['cells'][23]['source'])
 
 assert 'v0_07d16_il_weighted_1000iter' in s1,          'EXPERIMENT_NAME'
 assert 'v0-07d16-remote-pc' in s1,                     'RUN_PREFIX'
+assert "os.environ.get('SKIP_PIPELINE'" in s1,          'SKIP_PIPELINE env var'
 assert '_V07D2_FEAT_DIM      = 96' in s23,              'FEAT_DIM=96'
 assert "'1000'))  # v07d16" in s23,                     'N_ITERS=1000'
 assert '_V07D2_PATIENCE       = 9999' in s23,           'PATIENCE smoke mode'
@@ -200,5 +211,5 @@ assert '_V07D2_LAMBDA_IL    = 0.5' in s23,              'lambda_il=0.5'
 assert '_v07d2_best_margin' in s23,                     'best ckpt tracking'
 assert 'v07d12 saved model: wm=' in s23,                'measurement fix'
 assert '_sv97' in s23,                                   '97-dim padding'
-assert 'v07d16 Summary' in s23,                         'summary label'
+assert 'v0-07d16 Summary' in s23,                       'summary label'
 print('All sanity checks passed.')

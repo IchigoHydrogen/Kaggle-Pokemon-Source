@@ -11,7 +11,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Version | Machine | Type | Claimed | Description |
 |---|---|---|---|---|
-| v0-07d16-remote-pc | remote-pc | aggressive | 2026-06-26 | N_ITERS=1000 + early stopping (patience=150) + quality-weighted IL sampling (rank_bucket×won: top50+win=4, top50+lose=2, top200+win=3, top200+lose=1) + remove gc.collect/iter |
+| v0-07d18-remote-pc | remote-pc | aggressive | 2026-06-26 | Compound RL round 3: v07d17 iter110 model (+0.0490) as warm start; same settings as v07d17 |
 
 ---
 
@@ -33,6 +33,8 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Version | Machine | Type | Promotion | winner_margin (stored) | winner_margin (inference) | Notes |
 |---|---|---|---|---|---|---|
+| v0-07d17-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0490 | **+0.0490** | Compound RL round 2: warm start from v07d16 iter110 (+0.0308). best_iter=110 (+0.0490). il_baseline=+0.0308. Heavy oscillation (iter100=-0.0251→iter110=+0.0490). Memory stop @iter146. Part B PASS. New research baseline=+0.0490. |
+| v0-07d16-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0308 | **+0.0308** | N_ITERS=1000 + early stopping (patience=150) + quality-weighted IL sampling. best_iter=110 (+0.0308), then oscillated (iter120=-0.0011). Memory safety stop @ iter157. Part B PASS. New research baseline=+0.0308. |
 | v0-07d15-remote-pc | remote-pc | conservative | exploration_promote | +0.0219 | +0.0219 | Memory fix validated (peak 43.7GB vs v07d13 46GB). Speed: 92.4min vs 89.7min — gc.collect/iter slow. wm=+0.0219 < baseline +0.0269 (run variance). Key: 150-iter runs now feasible (~59GB est). Remove gc.collect/iter in v07d16. |
 | v0-07d14-remote-pc | remote-pc | conservative | **needs_followup** | — | — | FAILED: DeadKernelError (OOM) during Cell[23]. Memory: ~29GB→62GB+ over 150 iters. Docker hit RAM ceiling. Pipeline (cells 1-22) completed; rl_episodes.pt=0 bytes; no model produced. Research baseline unchanged (+0.0269). Root cause: episode buffer grows O(n_iters). Fix: cap buffer or reduce iters. |
 | v0-07d13-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0269 | **+0.0269** | N_ITERS=100. iter-99 = best-ckpt (+0.0269). Model still converging at final iter — needs more iters. Massive gain: 50 iters peak=+0.0080 → 100 iters peak=+0.0269 (+0.0189 improvement). Part B PASS. New research baseline=+0.0269. |
@@ -57,5 +59,5 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 See `loop-harness.md` Baseline Handling for authoritative values.
 
 - **Stored-feature eval (inflated — do not use for new comparisons):** `winner_margin = 0.057` (v07d4)
-- **Inference-feature eval (authoritative):** `winner_margin = +0.0269` (v07d13-remote-pc; learning_promote; iter-99 best-ckpt; prev: +0.0080 v07d11)
+- **Inference-feature eval (authoritative):** `winner_margin = +0.0490` (v07d17-remote-pc; learning_promote; iter-110 best-ckpt; prev: +0.0308 v07d16)
 - Current runtime baseline: `holdout_model_top1 = 0.509` (guarded_torch_policy)
