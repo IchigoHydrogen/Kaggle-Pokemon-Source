@@ -9,7 +9,9 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 ## Claimed
 
-_(none)_
+| Version | Machine | Type | Claimed | Description |
+|---|---|---|---|---|
+| v0-07d16-remote-pc | remote-pc | aggressive | 2026-06-26 | N_ITERS=1000 + early stopping (patience=150) + quality-weighted IL sampling (rank_bucket×won: top50+win=4, top50+lose=2, top200+win=3, top200+lose=1) + remove gc.collect/iter |
 
 ---
 
