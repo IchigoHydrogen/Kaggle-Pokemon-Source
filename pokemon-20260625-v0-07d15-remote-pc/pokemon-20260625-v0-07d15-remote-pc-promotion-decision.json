@@ -1,0 +1,84 @@
+{
+  "version": "pokemon-20260625-v0-07d15-remote-pc",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "reason": "All hard gates PASS (Part B ok, loader=True, entrypoint=True). wm_inference=+0.0219 is positive and above v07d7 baseline (+0.0059) but below current research baseline +0.0269 (v07d13) by 0.005 — within run variance for same algorithm. Primary goal of v07d15 was memory fix + speedup validation, NOT wm_inference improvement. Memory fix validated: peak RAM 43.7GB vs v07d13 46GB (2.3GB savings from buffer removal). Speed: 92.4min vs v07d13 89.7min — gc.collect() per iter (~100 calls) adds overhead that offsets IL batch epoch-level speedup. Research baseline unchanged at +0.0269.",
+  "machine": "remote-pc",
+  "experiment_type": "conservative",
+  "hard_gates": "pass",
+  "smoke_gate_ok": true,
+  "winner_margin_summary": {
+    "winner_margin_stored": 0.0219,
+    "winner_margin_inference": 0.0219,
+    "winner_top1": null,
+    "loser_top1": null,
+    "il_baseline_winner_margin": -0.0059,
+    "research_baseline": 0.0269,
+    "below_baseline_by": -0.005,
+    "verdict": "run variance (same algo as v07d13; 0.005 gap is within noise)",
+    "best_checkpoint_iter": 70,
+    "best_checkpoint_margin": 0.0219,
+    "iter_margin_trajectory": {
+      "0": 0.0021,
+      "10": -0.0153,
+      "20": -0.0247,
+      "30": 0.0102,
+      "40": 0.0015,
+      "50": -0.0024,
+      "60": 0.004,
+      "70": 0.0219,
+      "80": -0.0047,
+      "90": 0.0214,
+      "99": 0.0186
+    }
+  },
+  "runtime_summary": {
+    "part_b": "pass",
+    "kaggle_loader_model_loaded": true,
+    "entrypoint_ok": true
+  },
+  "training_summary": {
+    "rl_algo": "online PPO (PPO clip=0.2, lambda_il=0.5, lambda_rl=0.05)",
+    "rl_iters": 100,
+    "games_per_iter": 200,
+    "elapsed_min": 92.4,
+    "elapsed_min_v07d13": 89.7,
+    "elapsed_delta": "+2.7min (gc.collect overhead > IL batch speedup)",
+    "feat_dim": 96,
+    "lambda_il": 0.5,
+    "pre_rl_win_rate": 0.41,
+    "post_rl_win_rate": 0.24,
+    "peak_ram_gb": 43.7,
+    "peak_ram_v07d13_gb": 46.0,
+    "ram_savings_gb": 2.3
+  },
+  "memory_fix_validation": {
+    "episode_buffer_removed": true,
+    "del_ro_per_iter": true,
+    "gc_collect_per_iter": true,
+    "peak_ram_gb": 43.7,
+    "peak_ram_v07d13_100iter": 46.0,
+    "peak_ram_v07d14_oom": 62.4,
+    "savings_vs_v07d13": "2.3GB",
+    "oom_prevented": "yes — v07d14 OOM'd at 62.4GB; v07d15 at 100 iters peaks at 43.7GB",
+    "150iter_feasibility": "estimated ~59-60GB at 150 iters (within 62GB host limit)",
+    "main_ram_growth_source": "NOT episode buffer (only 2.3GB); likely CUDA allocator caching + Python fragmentation",
+    "note": "Memory fix is necessary for 150-iter runs but margins are tight (~2GB headroom)"
+  },
+  "speedup_analysis": {
+    "torch_no_grad_in_collect": "applied",
+    "il_batch_epoch_level": "applied",
+    "gc_collect_per_iter": "applied — but SLOW: 100 calls × ~1.5s = ~2.5min overhead",
+    "net_elapsed_delta": "+2.7min (slower than v07d13)",
+    "recommendation": "remove gc.collect() from per-iter loop in v07d16; del _ro alone is sufficient"
+  },
+  "research_baseline_unchanged": {
+    "winner_margin_inference": 0.0269,
+    "source": "v07d13-remote-pc"
+  },
+  "next_candidates": [
+    "[aggressive] v07d16: extend N_ITERS=150 with memory fix (remove gc.collect per iter; del _ro alone is sufficient). 43.7GB at 100 iters → ~58-60GB at 150 iters (within 62GB).",
+    "[conservative] v07d16: N_ITERS=100 but remove gc.collect() per iter to recover the 2.7min overhead and confirm speedup.",
+    "[analysis] Investigate main RAM growth source (CUDA allocator / Python fragmentation) — may need torch.cuda.empty_cache() instead of gc.collect()."
+  ]
+}

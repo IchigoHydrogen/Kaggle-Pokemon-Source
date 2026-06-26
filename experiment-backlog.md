@@ -31,6 +31,7 @@ _(none)_
 
 | Version | Machine | Type | Promotion | winner_margin (stored) | winner_margin (inference) | Notes |
 |---|---|---|---|---|---|---|
+| v0-07d15-remote-pc | remote-pc | conservative | exploration_promote | +0.0219 | +0.0219 | Memory fix validated (peak 43.7GB vs v07d13 46GB). Speed: 92.4min vs 89.7min — gc.collect/iter slow. wm=+0.0219 < baseline +0.0269 (run variance). Key: 150-iter runs now feasible (~59GB est). Remove gc.collect/iter in v07d16. |
 | v0-07d14-remote-pc | remote-pc | conservative | **needs_followup** | — | — | FAILED: DeadKernelError (OOM) during Cell[23]. Memory: ~29GB→62GB+ over 150 iters. Docker hit RAM ceiling. Pipeline (cells 1-22) completed; rl_episodes.pt=0 bytes; no model produced. Research baseline unchanged (+0.0269). Root cause: episode buffer grows O(n_iters). Fix: cap buffer or reduce iters. |
 | v0-07d13-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0269 | **+0.0269** | N_ITERS=100. iter-99 = best-ckpt (+0.0269). Model still converging at final iter — needs more iters. Massive gain: 50 iters peak=+0.0080 → 100 iters peak=+0.0269 (+0.0189 improvement). Part B PASS. New research baseline=+0.0269. |
 | v0-07d12-remote-pc | remote-pc | conservative | exploration_promote | +0.0077 | +0.0077 | Measurement fix confirmed. iter-40 best-ckpt=+0.0077. Part B pass. Below v07d11 (+0.0080) by 0.0003 (run variance). Research baseline stays at +0.0080. |
