@@ -1,0 +1,37 @@
+{
+  "version": "pokemon-20260625-v0-07d14-remote-pc",
+  "decision": "needs_followup",
+  "promotion_type": "needs_followup",
+  "reason": "FAILED: DeadKernelError during Cell[23] RL training. Kernel was killed (likely OOM) during 150-iter training. Evidence: rl_episodes.pt = 0 bytes, main_option_scorer.pt missing, rl_report.json missing. Pipeline cells (1-22) completed successfully (all parquet/json artifacts present). Memory growth observed in ps aux: ~29GB at start → ~62GB at iter ~113 → kernel kill. Docker container or host hit RAM ceiling. 150 iters × 200 games = 30k games; episode buffer grows O(n_iters). At 100 iters (v07d13), peak RAM was ~46GB. At 150 iters, RAM exceeded limit.",
+  "machine": "remote-pc",
+  "experiment_type": "conservative",
+  "error": "DeadKernelError: Kernel died (OOM suspected)",
+  "hard_gates": "not_evaluated",
+  "smoke_gate_ok": false,
+  "winner_margin_summary": {
+    "winner_margin_inference": null,
+    "note": "Cell[23] did not complete. No RL-trained model produced."
+  },
+  "failure_details": {
+    "rl_report_exists": false,
+    "main_option_scorer_exists": false,
+    "rl_episodes_pt_bytes": 0,
+    "pipeline_completed": true,
+    "kernel_death_type": "DeadKernelError",
+    "likely_cause": "OOM: memory grew from 29GB → 62GB+ during Cell[23]; kernel killed before completing 150 iters",
+    "nbconvert_exit": "crashed (inplace write not performed; execution_counts remain None)",
+    "memory_at_iter_113": "~62GB (from ps aux RSS)",
+    "memory_at_v07d13_end": "~46GB (100 iters)"
+  },
+  "research_baseline_unchanged": {
+    "winner_margin_inference": 0.0269,
+    "source": "v07d13-remote-pc"
+  },
+  "next_candidates": [
+    "[analysis] Investigate memory footprint: episode buffer accumulates across iters? If yes, cap buffer size or truncate old episodes.",
+    "[conservative] v07d15: re-run 150 iters with episode buffer capped at last N iters to reduce memory.",
+    "[conservative] v07d15: re-run 100 iters from v07d13 setup — v07d13 is confirmed working at 100 iters.",
+    "[aggressive] v07d15: try warmstarting from v07d13 model (rather than IL weights) for 50 additional iters with fresh episode collection."
+  ],
+  "loop_status": "STOPPED — user requested loop stop after v07d14"
+}

@@ -9,9 +9,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 ## Claimed
 
-| Experiment | Tag | Machine | Date |
-|---|---|---|---|
-| v07d14: extend N_ITERS=150 (conservative; model still converging at iter-99) | conservative | remote-pc | 2026-06-26 |
+_(none)_
 
 ---
 
@@ -33,6 +31,7 @@ Rules → `loop-harness.md`. Procedures → `loop-skills.md`.
 
 | Version | Machine | Type | Promotion | winner_margin (stored) | winner_margin (inference) | Notes |
 |---|---|---|---|---|---|---|
+| v0-07d14-remote-pc | remote-pc | conservative | **needs_followup** | — | — | FAILED: DeadKernelError (OOM) during Cell[23]. Memory: ~29GB→62GB+ over 150 iters. Docker hit RAM ceiling. Pipeline (cells 1-22) completed; rl_episodes.pt=0 bytes; no model produced. Research baseline unchanged (+0.0269). Root cause: episode buffer grows O(n_iters). Fix: cap buffer or reduce iters. |
 | v0-07d13-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0269 | **+0.0269** | N_ITERS=100. iter-99 = best-ckpt (+0.0269). Model still converging at final iter — needs more iters. Massive gain: 50 iters peak=+0.0080 → 100 iters peak=+0.0269 (+0.0189 improvement). Part B PASS. New research baseline=+0.0269. |
 | v0-07d12-remote-pc | remote-pc | conservative | exploration_promote | +0.0077 | +0.0077 | Measurement fix confirmed. iter-40 best-ckpt=+0.0077. Part B pass. Below v07d11 (+0.0080) by 0.0003 (run variance). Research baseline stays at +0.0080. |
 | v0-07d11-remote-pc | remote-pc | aggressive | **learning_promote** | +0.0080 | +0.0046 (bug) | dim96 removal + online PPO + best-ckpt. Part B PASS. Best-ckpt restored iter40=+0.0080 > research baseline +0.0059. rl_report shows +0.0046 (measurement timing bug: computed before restore). Actual saved model=iter40 (+0.0080). New research baseline=+0.0080. Fix measurement in v07d12. |
