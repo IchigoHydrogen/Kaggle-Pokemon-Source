@@ -1,0 +1,14 @@
+LEAGUE test: 5 Alakazam agents vs STRONG v62-Lucario. Kaggle: champ1023>exguard941>MC10 937>deckout896>v13d4 720
+  champion(1023)   vs_v62_wr=0.533 (n=30)
+  exguard(941)     vs_v62_wr=0.400 (n=30)
+  MC10(937)        vs_v62_wr=0.700 (n=30)
+  deckout(896)     vs_v62_wr=0.633 (n=30)
+  v13d4(720)       vs_v62_wr=0.400 (n=30)
+--- ranking vs v62 (strong pilot) ---
+  0.700 MC10(937)
+  0.633 deckout(896)
+  0.533 champion(1023)
+  0.400 exguard(941)
+  0.400 v13d4(720)
+DONE_V62LEAGUE
+EXIT_0

@@ -205,133 +205,163 @@ def detect_opponent_archetype(op_all_pokemon, stadium_id: int = 0) -> tuple[str,
     return best, int(score)
 
 
-
-# v0-05d18: UNKNOWN_0 LightGBM inference. Falls back to policy table on failure.
-
-_U0_LGBM = None
-
-def _u0_load_lgbm():
-    global _U0_LGBM
-    try:
-        import os as _os, lightgbm as _lgb, json as _json
-        _d = _os.path.dirname(_os.path.abspath(__file__))
-        _mp = _os.path.join(_d, 'unknown0_lgbm.txt')
-        _pp = _os.path.join(_d, 'unknown0_lgbm_prep.json')
-        if not _os.path.exists(_mp) or not _os.path.exists(_pp):
-            return
-        _model = _lgb.Booster(model_file=_mp)
-        with open(_pp) as _f:
-            _prep = _json.load(_f)
-        _U0_LGBM = {'model': _model, 'prep': _prep}
-    except Exception:
-        pass
-
-_u0_load_lgbm()
+    # v0-05d1 UNKNOWN_0 policy-table assist, distilled from offline PyTorch MLP.
+    USE_UNKNOWN0_POLICY_TABLE = True
+    UNKNOWN0_POLICY_TABLE = {'12|13|14||safe||ko||late': '13', '12|13|14||safe||ko||mid': '13', '12|13|14||safe||no_ko||late': '13', '12|13|14||safe||no_ko||mid': '13', '12|13|14|END||safe||ko||late': 'END', '12|13|14|END||safe||ko||mid': 'END', '12|13|14|END||safe||no_ko||late': 'END', '12|13|14|END||safe||no_ko||mid': 'END', '12|13|14|END|NO||safe||ko||mid': 'END', '12|13|14|END|NO||safe||no_ko||mid': 'END', '12|13|14|END|NO|YES||safe||ko||late': 'END', '12|13|14|END|NO|YES||safe||ko||mid': 'END', '12|13|14|END|NO|YES||safe||no_ko||late': 'END', '12|13|14|END|NUMBER||safe||ko||late': 'END', '12|13|14|END|NUMBER||safe||ko||mid': 'END', '12|13|14|END|YES||risk||ko||late': 'END', '12|13|14|END|YES||safe||ko||mid': 'END', '12|13|14|END|YES||safe||no_ko||late': 'END', '14|END||safe||ko||early': 'END', '14|END||safe||ko||late': 'END', '14|END||safe||ko||mid': 'END', '14|END|NO||safe||ko||late': 'END', '14|END|NO||safe||ko||mid': 'END', '14|END|NO||safe||no_ko||late': 'END', '14|END|NO||safe||no_ko||mid': 'END', '14|END|NO|YES||safe||ko||late': 'END', '14|END|NO|YES||safe||ko||mid': 'END', '14|END|NO|YES||safe||no_ko||late': 'END', '14|END|NO|YES||safe||no_ko||mid': 'END', '14|END|NUMBER||safe||ko||late': 'END', '14|END|NUMBER||safe||ko||mid': 'END', '14|END|NUMBER|YES||safe||ko||mid': 'END', '14|END|YES||safe||ko||early': 'YES', '14|END|YES||safe||ko||late': 'END', '14|END|YES||safe||ko||mid': 'END', '14|END|YES||safe||no_ko||late': 'END', '12|13|14||*||*||*': '13', '12|13|14|END||*||*||*': 'END', '12|13|14|END|NO||*||*||*': 'END', '12|13|14|END|NO|YES||*||*||*': 'END', '12|13|14|END|NUMBER||*||*||*': 'END', '12|13|14|END|YES||*||*||*': 'END', '14|END||*||*||*': 'END', '14|END|NO||*||*||*': 'END', '14|END|NO|YES||*||*||*': 'END', '14|END|YES||*||*||*': 'END'}
+    UNKNOWN0_POLICY_STATS = {
+        "calls": 0, "unknown0_context": 0, "eligible": 0,
+        "key_hit": 0, "signature_fallback_hit": 0, "miss": 0,
+        "no_candidate": 0, "selected": 0,
+    }
+    UNKNOWN0_POLICY_SELECTED_OPTION_TYPE_COUNTS = {}
+    UNKNOWN0_POLICY_HIT_KEY_COUNTS = {}
 
 
-def _u0_lgbm_scores(obs, select, my_index, pi_opp):
-    """Return per-option LightGBM scores for UNKNOWN_0, or None on failure."""
-    if _U0_LGBM is None:
-        return None
-    try:
-        import numpy as _np
-        my_ps = obs.current.players[my_index]
-        op_ps = obs.current.players[pi_opp]
-        my_active = (my_ps.active or [None])[0]
-        op_active = (op_ps.active or [None])[0]
-        my_bench = [p for p in (my_ps.bench or []) if p is not None]
-        op_bench = [p for p in (op_ps.bench or []) if p is not None]
-        my_all = ([my_active] if my_active else []) + my_bench
-        my_ids = [getattr(p, 'id', 0) for p in my_all if p is not None]
-        my_hand_n = float(len(my_ps.hand or []))
-        my_deck_n = float(getattr(my_ps, 'deckCount', len(getattr(my_ps, 'deck', []) or [])))
-        op_hp = float(getattr(op_active, 'hp', 0) or 0)
-        powerful_hand = my_hand_n * 20.0
-        sig = _unknown0_policy_abstract_sig(select) if 'USE_ABSTRACT_OPTION_SIGNATURE' in globals() and USE_ABSTRACT_OPTION_SIGNATURE else 'N0'
-        _op_all = ([op_active] if op_active else []) + op_bench
-        _op_arch, _ = detect_opponent_archetype(_op_all, float(getattr(getattr(obs.current, 'stadium', None), 'id', 0) or 0))
-        # v08d18: prize_gap — len(prize list) counts face-down prize cards correctly
-        _my_prizes_left = float(len(list(getattr(my_ps, 'prize', None) or [])))
-        _op_prizes_left = float(len(list(getattr(op_ps, 'prize', None) or [])))
-        _prize_gap = _my_prizes_left - _op_prizes_left
-        # v08d19: op_last_context proxy from observable opponent state
-        # exact context not observable; approximate from op energy count
-        _op_energy = float(getattr(op_active, 'energyCount', getattr(op_active, 'energy_count', 0)) or 0)
-        _op_last_ctx = 'UNKNOWN_0' if _op_energy >= 2 else ('ATTACH_FROM' if _op_energy == 1 else 'NONE')
-        _steps_since_op = 2.0  # v08d19: approx (alternating turns)
-        rows = []
+    def _unknown0_policy_stat_inc(key, amount=1):
+        try:
+            UNKNOWN0_POLICY_STATS[key] = UNKNOWN0_POLICY_STATS.get(key, 0) + amount
+        except Exception:
+            pass
+
+
+    def _unknown0_policy_count_dict(d, key, amount=1):
+        try:
+            d[key] = d.get(key, 0) + amount
+        except Exception:
+            pass
+
+
+    def _unknown0_policy_ctx_identifiers(context):
+        ids = []
+        for attr in ("name", "value"):
+            try:
+                v = getattr(context, attr, None)
+                if v is not None:
+                    ids.append(str(v))
+            except Exception:
+                pass
+        try:
+            s = str(context)
+            ids.append(s)
+            if "." in s:
+                ids.append(s.split(".")[-1])
+        except Exception:
+            pass
+        return set(ids)
+
+
+    def _unknown0_policy_is_context(context):
+        ids = _unknown0_policy_ctx_identifiers(context)
+        return bool(ids.intersection({"UNKNOWN_0", "UNKNOWN", "0"}))
+
+
+    def _unknown0_policy_option_type_identifiers(option):
+        ids = []
+        t = getattr(option, "type", None)
+        for attr in ("name", "value"):
+            try:
+                v = getattr(t, attr, None)
+                if v is not None:
+                    ids.append(str(v))
+            except Exception:
+                pass
+        try:
+            s = str(t)
+            ids.append(s)
+            if "." in s:
+                ids.append(s.split(".")[-1])
+        except Exception:
+            pass
+        return set(x.upper() if x.isalpha() else x for x in ids if x is not None and str(x) != "")
+
+
+    def _unknown0_policy_signature_forms(select):
+        # Build multiple forms so dataset numeric option types like 12|13|14 and runtime enum names can both hit.
+        per_option = [_unknown0_policy_option_type_identifiers(o) for o in select.option]
+        forms = set()
+        for pick in ("name", "value", "str"):
+            vals = []
+            for o in select.option:
+                t = getattr(o, "type", None)
+                v = None
+                try:
+                    if pick == "name":
+                        v = getattr(t, "name", None)
+                    elif pick == "value":
+                        v = getattr(t, "value", None)
+                    else:
+                        v = str(t).split(".")[-1]
+                except Exception:
+                    v = None
+                if v is not None:
+                    vals.append(str(v).upper() if str(v).isalpha() else str(v))
+            if vals:
+                forms.add("|".join(sorted(set(vals))))
+        # also a broad merged form as last resort
+        merged = []
+        for ids in per_option:
+            if ids:
+                # prefer numeric id if present to match observed UNKNOWN_0 training signatures
+                nums = sorted([x for x in ids if str(x).isdigit()])
+                merged.append(nums[0] if nums else sorted(ids)[0])
+        if merged:
+            forms.add("|".join(sorted(set(merged))))
+        return forms
+
+
+    def _unknown0_policy_select(select, scores, context, turn, deckout_risk_strict, deckout_risk, can_win_this_turn, target_can_kill, desc_indices):
+        _unknown0_policy_stat_inc("calls")
+        if not USE_UNKNOWN0_POLICY_TABLE or not _unknown0_policy_is_context(context):
+            return None
+        _unknown0_policy_stat_inc("unknown0_context")
+        try:
+            if int(select.minCount) != 1 or int(select.maxCount) != 1:
+                return None
+        except Exception:
+            return None
+        _unknown0_policy_stat_inc("eligible")
+        sig_forms = _unknown0_policy_signature_forms(select)
+        deck_bucket = "strict" if deckout_risk_strict else "risk" if deckout_risk else "safe"
+        ko_bucket = "ko" if (target_can_kill or can_win_this_turn) else "no_ko"
+        turn_bucket = "early" if int(turn) <= 2 else "mid" if int(turn) <= 5 else "late"
+        preferred = None
+        hit_key = None
+        signature_fallback = False
+        for sig in sorted(sig_forms):
+            keys = [
+                f"{sig}||{deck_bucket}||{ko_bucket}||{turn_bucket}",
+                f"{sig}||{deck_bucket}||{ko_bucket}||*",
+                f"{sig}||{deck_bucket}||*||*",
+                f"{sig}||*||*||*",
+            ]
+            for k in keys:
+                if k in UNKNOWN0_POLICY_TABLE:
+                    preferred = UNKNOWN0_POLICY_TABLE[k]
+                    hit_key = k
+                    signature_fallback = k.endswith("||*||*||*")
+                    break
+            if preferred is not None:
+                break
+        if preferred is None:
+            _unknown0_policy_stat_inc("miss")
+            return None
+        _unknown0_policy_stat_inc("key_hit")
+        if signature_fallback:
+            _unknown0_policy_stat_inc("signature_fallback_hit")
+        _unknown0_policy_count_dict(UNKNOWN0_POLICY_HIT_KEY_COUNTS, hit_key)
+        candidates = []
+        preferred_s = str(preferred).upper() if str(preferred).isalpha() else str(preferred)
         for i, o in enumerate(select.option):
-            ot = getattr(o, 'type', None)
-            ot_n = (str(getattr(ot, 'name', '') or '').upper() or
-                    str(ot).split('.')[-1].upper() or 'UNK')
-            rows.append({
-                'option_index': float(i),
-                'num_options': float(len(select.option)),
-                'min_count': float(getattr(select, 'minCount', 1) or 1),
-                'max_count': float(getattr(select, 'maxCount', 1) or 1),
-                'card_id': float(getattr(o, 'id', 0) or 0),
-                'target_card_id': float(getattr(o, 'targetId', 0) or 0),
-                'attack_id': float(getattr(o, 'attackId', 0) or 0),
-                'number_value': float(getattr(o, 'number', 0) or 0),
-                'in_play_index': float(getattr(o, 'inPlayIndex', 0) or 0),
-                'remain_damage_counter': float(getattr(o, 'remainDamageCounter', 0) or 0),
-                'remain_energy_cost': float(getattr(o, 'remainEnergyCost', 0) or 0),
-                'turn': float(obs.current.turn),
-                'turn_action_count': 0.0,
-                'my_active_id': float(getattr(my_active, 'id', 0) or 0),
-                'my_active_hp': float(getattr(my_active, 'hp', 0) or 0),
-                'my_active_energy_count': float(len(getattr(my_active, 'energies', []) or [])),
-                'op_active_id': float(getattr(op_active, 'id', 0) or 0),
-                'op_active_hp': op_hp,
-                'op_active_energy_count': float(len(getattr(op_active, 'energies', []) or [])),
-                'my_bench_count': float(len(my_bench)),
-                'op_bench_count': float(len(op_bench)),
-                'my_alakazam_count': float(sum(1 for _id in my_ids if _id == 743)),
-                'my_kadabra_count': float(sum(1 for _id in my_ids if _id == 742)),
-                'my_abra_count': float(sum(1 for _id in my_ids if _id == 741)),
-                'my_dudunsparce_count': float(sum(1 for _id in my_ids if _id == 66)),
-                'my_hand_count': my_hand_n,
-                'op_hand_count': float(len(op_ps.hand or [])),
-                'my_deck_count': my_deck_n,
-                'op_deck_count': float(getattr(op_ps, 'deckCount', 0)),
-                'my_prizes_left': float(len([p for p in (my_ps.prize or []) if p is not None])),
-                'op_prizes_left': float(len([p for p in (op_ps.prize or []) if p is not None])),
-                'stadium_id': float(getattr(getattr(obs.current, 'stadium', None), 'id', 0) or 0),
-                'powerful_hand_damage_est': powerful_hand,
-                'powerful_hand_can_ko_active': float(powerful_hand >= op_hp),
-                'deckout_risk_feature': float(my_deck_n <= 4),
-                'context_name': 'UNKNOWN_0',
-                'option_type': ot_n,
-                'area': str(getattr(o, 'area', 0) or 0),
-                'in_play_area': str(getattr(o, 'inPlayArea', 0) or 0),
-                'option_signature': sig,
-                'opponent_archetype_norm': _op_arch,
-                'prize_gap': _prize_gap,
-                'op_last_context': _op_last_ctx,
-                'steps_since_op': _steps_since_op,
-                'position_winrate': 0.5,
-            })
-        prep = _U0_LGBM['prep']
-        feature_names = prep['feature_names']
-        cat_maps = prep.get('cat_maps', {})
-        cat_set = set(prep.get('cat_features', []))
-        X = _np.zeros((len(rows), len(feature_names)), dtype='float64')
-        for ci, col in enumerate(feature_names):
-            if col in cat_maps:
-                m = cat_maps[col]
-                for ri, r in enumerate(rows):
-                    X[ri, ci] = float(m.get(str(r.get(col, 'UNK') or 'UNK'), 0))
-            elif col in cat_set:
-                for ri, r in enumerate(rows):
-                    X[ri, ci] = float(r.get(col, 0) or 0)
-            else:
-                for ri, r in enumerate(rows):
-                    X[ri, ci] = float(r.get(col, 0) or 0)
-        return _U0_LGBM['model'].predict(X).tolist()
-    except Exception:
-        return None
-
-
+            if preferred_s in _unknown0_policy_option_type_identifiers(o):
+                candidates.append(i)
+        if not candidates:
+            _unknown0_policy_stat_inc("no_candidate")
+            return None
+        selected_i = max(candidates, key=lambda i: scores[i] if i < len(scores) else -10**18)
+        _unknown0_policy_stat_inc("selected")
+        _unknown0_policy_count_dict(UNKNOWN0_POLICY_SELECTED_OPTION_TYPE_COUNTS, preferred_s)
+        return selected_i
+    
 def agent(obs_dict: dict) -> list[int]:
     obs = to_observation_class(obs_dict)
     if obs.select is None:
@@ -1011,30 +1041,11 @@ def agent(obs_dict: dict) -> list[int]:
                     score = -1
 
         elif o.type == OptionType.EVOLVE:
-            if context == SelectContext.TO_BENCH:
-                card = get_card(obs, o.area, o.index, my_index)
-                pokemon = None
-            else:
-                card = get_card(obs, AreaType.HAND, o.index, my_index)
-                pokemon = get_card(obs, o.inPlayArea, o.inPlayIndex, my_index)
+            card = get_card(obs, AreaType.HAND, o.index, my_index)
+            pokemon = get_card(obs, o.inPlayArea, o.inPlayIndex, my_index)
             score = 9000
 
-            if context == SelectContext.TO_BENCH:
-                if card is not None:
-                    if card.id == Abra:
-                        score += 100    # Bench Abra for evolution chain
-                    elif card.id == Dunsparce:
-                        score += 80     # Draw support on bench
-                    elif card.id == Psyduck:
-                        score += 60 if op_has_duskull else -9100
-                    elif card.id == Shaymin:
-                        score += 40 if op_has_water_threat else -9100
-                    elif card.id == Alakazam:
-                        score -= 50     # Keep Alakazam in hand for Rare Candy
-                    elif card.id == Riolu:
-                        score += 20     # Bench Riolu for evolution chain
-
-            elif card.id == Alakazam:
+            if card.id == Alakazam:
                 if safe_draws < 3:
                     score = -1  # Deck too thin for Psychic Draw (3 cards)
                 elif o.inPlayArea == AreaType.ACTIVE:
@@ -1127,6 +1138,14 @@ def agent(obs_dict: dict) -> list[int]:
     max_count = min(len(select.option), max(0, int(select.maxCount)))
     if max_count <= 0:
         return []
+    unknown0_policy_selected = _unknown0_policy_select(
+        select, scores, context, state.turn, deckout_risk_strict, deckout_risk,
+        can_win_this_turn, target_can_kill, desc_indices
+    ) if 'USE_UNKNOWN0_POLICY_TABLE' in globals() else None
+    if unknown0_policy_selected is not None:
+        selected = safe_unique_action([unknown0_policy_selected], len(select.option), min_count, max_count)
+        if len(selected) >= min_count:
+            return selected
     threshold = context_threshold(context, safe_draws, can_win_this_turn, opponent_archetype, field_counts[Alakazam] > 0)
     eligible = [i for i in desc_indices if scores[i] >= threshold]
     # For optional contexts, allow no-op when all choices are weak.

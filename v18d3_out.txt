@@ -1,0 +1,5 @@
+samples: 11838 win-rate: 0.502 games: 150
+Lucario value AUC=0.753 (val n=2603)
+feat importance: {'turn': 8152, 'mega_count': 1485, 'mega_fight_energy': 6321, 'riolu_count': 1517, 'my_total_energy': 2901, 'my_active_hp': 6210, 'op_active_hp': 7567, 'my_bench': 1301, 'op_bench': 5465, 'my_hand': 3312, 'my_deck': 11736, 'my_prizes': 7642, 'op_prizes': 7031}
+DONE_V18D3
+EXIT_0

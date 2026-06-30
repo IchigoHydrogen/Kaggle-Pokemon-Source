@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "contexts": [
+    "UNKNOWN_0"
+  ],
+  "alpha": 1.0,
+  "torch_in_submission": false,
+  "fallback": "rule_only"
+}
