@@ -1,0 +1,38 @@
+{
+  "version": "pokemon-20260623-v0-05d5",
+  "baseline": "pokemon-20260623-v0-05d4",
+  "decision": "promote",
+  "promotion_type": "diagnostic_baseline",
+  "reason": "Full notebook execution passed with clean hard gates and split-aware UNKNOWN_0 policy evaluation artifacts for train, valid, and holdout. This version is promoted as a diagnostics baseline, not as proof of gameplay improvement.",
+  "hard_gates": {
+    "run_mode": "full",
+    "error_count": 0,
+    "decision_eval_rows": 16446,
+    "split_eval_rows": 3,
+    "stress_eval_rows": 12,
+    "holdout_decisions": 2502,
+    "holdout_policy_hit_decisions": 1945,
+    "holdout_policy_hit_rate": 0.7773780975219824,
+    "holdout_policy_correct_rate_on_hits": 0.6015424164524421,
+    "submission_archives_prefixed": true,
+    "archive_required_files_present": true,
+    "archive_has_pycache": false,
+    "archive_has_torch_name": false
+  },
+  "baseline_comparison": {
+    "gameplay_change": "none intended",
+    "policy_table_entries": "59 in this full run; comparable to v0-05d4 scale",
+    "new_artifacts": [
+      "unknown0_policy_decision_eval",
+      "unknown0_policy_split_eval",
+      "unknown0_policy_stress_eval"
+    ],
+    "local_confirm_win_rate": 0.925,
+    "selected_variant_policy_runtime_selected": 6
+  },
+  "known_risks": [
+    "Offline replay action agreement is not a direct win-rate estimate.",
+    "UNKNOWN_0 runtime hit rate in local variant smoke remains sparse, so policy impact is limited in those local games.",
+    "The diagnostic uses predictions from the existing validation prediction frame; split labels improve visibility but do not fully replace a separately trained holdout protocol."
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "version": "pokemon-20260623-v0-05d3",
+  "baseline": "pokemon-20260623-v0-05d2",
+  "decision": "promote",
+  "promotion_type": "operational_baseline",
+  "reason": "Deterministic episode-level train/valid/holdout split and stress-slice summary artifacts were added without changing gameplay behavior. The full notebook executed successfully, all hard gates passed, split artifacts were nonempty, and all recorded artifact paths exist.",
+  "hard_gates": {
+    "notebook_full_execution": "pass",
+    "run_mode": "full",
+    "error_count": 0,
+    "errors_json_len": 0,
+    "local_eval_status": "ok",
+    "smoke_illegal_action_count": 0,
+    "missing_artifact_paths": 0,
+    "unprefixed_output_files": 0,
+    "submission_archives_prefixed": true,
+    "submission_archive_required_files_present": true,
+    "submission_archive_python_cache_files": 0
+  },
+  "split_artifacts": {
+    "episode_split_rows": 5062,
+    "split_summary_rows": 3,
+    "stress_slice_summary_rows": 60,
+    "stress_slice_count": 20,
+    "split_counts": {
+      "train": 3549,
+      "valid": 732,
+      "holdout": 781
+    },
+    "split_ratios": {
+      "train": 0.701106,
+      "valid": 0.144607,
+      "holdout": 0.154287
+    },
+    "holdout_decision_rows": 228824,
+    "holdout_unknown0_decisions": 122283
+  },
+  "baseline_comparison": {
+    "gameplay_change_intended": false,
+    "selected_deck_hash": {
+      "baseline": "e702674c1864",
+      "new": "e702674c1864"
+    },
+    "final_submission_variant_effective": {
+      "baseline": "unknown0_policy_table",
+      "new": "unknown0_policy_table"
+    },
+    "decision_rows": {
+      "baseline": 1494391,
+      "new": 1494391
+    },
+    "option_rows": {
+      "baseline": 8352193,
+      "new": 8352193
+    },
+    "smoke_eval": {
+      "baseline_win_rate": 1.0,
+      "new_win_rate": 1.0,
+      "baseline_illegal_actions": 0,
+      "new_illegal_actions": 0
+    },
+    "confirm_random_same_deck": {
+      "baseline_win_rate": 0.975,
+      "new_win_rate": 0.9,
+      "baseline_illegal_actions": 0,
+      "new_illegal_actions": 0,
+      "interpretation": "Not used as promotion evidence because v0-05d3 makes no gameplay changes and local eval has stochastic variation."
+    },
+    "confirm_first_valid_same_deck": {
+      "baseline_win_rate": 0.975,
+      "new_win_rate": 1.0,
+      "baseline_illegal_actions": 0,
+      "new_illegal_actions": 0
+    }
+  },
+  "known_risks": [
+    "This version should not be claimed as a gameplay improvement.",
+    "The split/stress artifacts are reporting-only; model training still uses existing internal train/valid splits.",
+    "Local head-to-head evaluation seeds are still not fixed strongly enough for gameplay promotion decisions."
+  ],
+  "next_candidates": [
+    "Use the new holdout/stress artifacts to tighten UNKNOWN_0 policy activation.",
+    "Add deterministic head-to-head local evaluation seeds.",
+    "Create split-aware candidate deck comparison reports."
+  ]
+}

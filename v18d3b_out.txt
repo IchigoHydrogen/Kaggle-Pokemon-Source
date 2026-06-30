@@ -1,0 +1,3 @@
+lucario_VALUE_fwdsim vs generic_fwdsim, Lucario: wr=0.580 (n=50)
+DONE_V18D3B
+EXIT_0

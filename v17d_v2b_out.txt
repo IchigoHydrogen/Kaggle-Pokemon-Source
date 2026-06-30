@@ -1,0 +1,6 @@
+v2(terminal) vs v1(generic) same-deck pilot test, N=24/deck
+  Mega_Lucario         v2_winrate=0.542 (n=24)
+  Hop_Trevenant        v2_winrate=0.583 (n=24)
+  Archaludon_or_Other  v2_winrate=0.500 (n=24)
+DONE_V2B
+EXIT_0

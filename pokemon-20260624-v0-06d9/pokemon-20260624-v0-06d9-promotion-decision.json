@@ -1,0 +1,43 @@
+{
+  "version": "pokemon-20260624-v0-06d9",
+  "decision": "needs_followup",
+  "promotion_type": "learning_promote",
+  "reason": "pipeline speedup confirmed; guarded hybrid improves holdout; runtime probe is next candidate",
+  "hard_gates": {
+    "crosscheck_passed": true,
+    "crosscheck_max_abs_error": 2.8774656102292795e-08,
+    "notebook_stage_status": "ok",
+    "submission_adoption": false,
+    "fresh_training": true,
+    "reuses_v0_06d8_weights_or_predictions": false,
+    "decisions": 101253,
+    "option_rows": 1278625,
+    "feature_dim": 96,
+    "extract_time_sec": 246.36834111999997,
+    "train_time_sec": 1.5932100469999568,
+    "gpu_preload_ok": true,
+    "holdout_rule_top1": 0.18771468983633058,
+    "holdout_model_top1": 0.5012460429716441,
+    "holdout_model_top3": 0.7336835724388765,
+    "holdout_model_minus_rule_top1": 0.31353135313531355,
+    "holdout_model_top1_vs_v06d8": 4.604297164412241e-05,
+    "quality_ok_within_0_01": true,
+    "selected_prob_threshold": 0.45,
+    "selected_margin_threshold": 0.0,
+    "holdout_hybrid_top1": 0.4454098471071597,
+    "holdout_hybrid_minus_rule_top1": 0.25769515727082914,
+    "holdout_override_rate": 0.6281403650569138,
+    "holdout_benefit_count": 4563,
+    "holdout_harm_count": 737,
+    "holdout_danger_hybrid_minus_rule": 0.0
+  },
+  "known_risks": [
+    "MAIN exact imitation is a proxy, not a ladder-strength proof.",
+    "Vectorized extraction confirmed correct by cross-check, but only on first 100 decisions.",
+    "Runtime adoption is intentionally deferred."
+  ],
+  "next_candidates": [
+    "v0-06d10: guarded runtime probe — embed MAIN scorer in submission main.py with PLAY/ATTACH/EVOLVE-only overrides.",
+    "Add latency/durability evaluation before Kaggle-facing submission."
+  ]
+}

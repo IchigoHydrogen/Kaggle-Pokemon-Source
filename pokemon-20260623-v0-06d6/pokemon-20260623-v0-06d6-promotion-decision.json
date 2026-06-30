@@ -1,0 +1,66 @@
+{
+  "version": "pokemon-20260623-v0-06d6",
+  "base_notebook": "pokemon-20260623-v0-05d6.ipynb",
+  "decision": "needs_followup",
+  "promotion_type": "diagnostic_replay_agreement_axis",
+  "hypothesis": "Replay observations are faithful enough to run the agent directly, and outcome/strength-weighted agreement with real players gives a discriminating, Kaggle-correlated evaluation axis.",
+  "hypothesis_result": "feasibility_confirmed; outcome_weighting_NOT_discriminating; context_level_IS_discriminating_and_actionable",
+  "reason": "The v0-05d6 rule agent was run on 488,455 real replay decision states (142,599 with an alakazam actor) with zero agent exceptions and zero bad-shape outputs, so faithful agent-vs-replay agreement is feasible. However, aggregate agreement (~0.251) is essentially flat and non-monotonic across player strength and game outcome, so outcome/strength weighting does NOT yield a usable strength gradient. The real, actionable signal is at the context level, where three contexts are systematically BELOW random alignment.",
+  "hard_gates": {
+    "notebook_executed_full": true,
+    "run_mode": "full",
+    "error_count": 0,
+    "submission_policy_mode": "alakazam_rule_base",
+    "use_neural_for_submission": false,
+    "submission_imports_torch": false,
+    "archive_has_pycache_or_pyc": false,
+    "archive_required_files_present": true,
+    "agent_exceptions_on_replay": 0,
+    "agent_bad_shape_on_replay": 0,
+    "bad_episodes_skipped": 42,
+    "artifacts_prefixed_under_output_dir": true
+  },
+  "agreement_overall": {
+    "eligible_decisions": 488455,
+    "alakazam_actor_decisions": 142599,
+    "agreement_all": 0.2508,
+    "wilson95": [0.2486, 0.2531],
+    "rank_join_coverage": 0.677
+  },
+  "outcome_strength_NOT_discriminating": {
+    "winner_actor": 0.253,
+    "loser_actor": 0.249,
+    "winner_minus_loser": 0.0042,
+    "top200_winner": 0.251,
+    "by_rank_non_monotonic": {"top10": 0.227, "top50": 0.263, "top200": 0.248, "unranked": 0.251},
+    "note": "top10 players agree LEAST with our agent; the rank spread exists but is non-monotonic, so aggregate agreement is not a clean strength signal. Conditioning on winners/top200 adds essentially nothing. The user-chosen outcome-weighting hypothesis is empirically refuted as a discriminator."
+  },
+  "split_stability": {"train": 0.252, "holdout": 0.250, "valid": 0.246, "note": "stable across deterministic splits; holdout consistent."},
+  "by_matchup": {"alakazam_vs_alakazam": 0.235, "alakazam_vs_hop_control": 0.246, "alakazam_vs_lucario": 0.260, "alakazam_vs_other": 0.279},
+  "actionable_backlog_context_level": {
+    "below_random_systematic_anti_alignment": [
+      {"context": "TO_BENCH", "n": 3113, "agreement": 0.049, "random_baseline": 0.294, "lift_vs_random": -0.245,
+       "interpretation": "Bench placement: our agent picks differently from humans FAR below chance. High-volume, high-confidence weakness."},
+      {"context": "TO_DECK", "n": 824, "agreement": 0.011, "random_baseline": 0.302, "lift_vs_random": -0.291,
+       "interpretation": "Card-return-to-deck selection: near-zero alignment, well below chance."},
+      {"context": "SETUP_BENCH", "n": 81, "agreement": 0.074, "random_baseline": 0.470, "lift_vs_random": -0.396,
+       "interpretation": "Setup-phase bench placement: below chance; small volume."}
+    ],
+    "high_volume_low_lift": [
+      {"context": "MAIN", "n": 101253, "agreement": 0.189, "random_baseline": 0.129, "mean_options": 12.6,
+       "interpretation": "Main-phase action: above random but low; dominant volume; long-term high-impact but high-branching and hard."}
+    ],
+    "well_aligned": ["ACTIVATE 0.750", "SETUP_ACTIVE 0.650", "DISCARD_ENERGY 0.593", "EVOLVE 0.514", "SWITCH 0.467"]
+  },
+  "key_finding": "This diagnostic gives a context-level improvement roadmap, not an aggregate strength gate. The single most actionable, high-confidence target is TO_BENCH (and the related TO_DECK / SETUP_BENCH): our agent's bench/return-to-deck choices are systematically below random alignment with real players, which is almost certainly a real weakness rather than a stylistic difference.",
+  "implications_for_next_version": [
+    "Do NOT pursue outcome-weighted imitation as a strength lever; the winner/loser and rank gradients are flat/non-monotonic.",
+    "v0-06d7 candidate: fix the TO_BENCH bench-placement logic in the v0-05d6 rule agent, validating against this context-level agreement metric (agreement should move toward / above random and toward winner choices) plus the existing safety/holdout/eval gates. Single hypothesis, one context.",
+    "Keep MAIN as a later, larger target once a measurement loop on the low-volume contexts is proven."
+  ],
+  "next_candidates": [
+    "v0-06d7: TO_BENCH bench-placement rule fix on v0-05d6 base, gated on replay-agreement (context-level) + safety.",
+    "Then TO_DECK selection.",
+    "Later: MAIN-phase action scoring, using a per-option agreement decomposition."
+  ]
+}

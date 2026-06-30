@@ -1,0 +1,29 @@
+{
+  "version": "pokemon-20260623-v0-06d7",
+  "decision": "needs_followup",
+  "promotion_type": "offline_main_replay_supervised_learning",
+  "reason": "model has useful buckets but regresses dangerous MAIN option types; runtime adoption blocked",
+  "hard_gates": {
+    "notebook_stage_status": "ok",
+    "submission_adoption": false,
+    "decisions": 101253,
+    "option_rows": 1278625,
+    "feature_dim": 96,
+    "rule_exceptions": 0,
+    "rule_bad_shape": 0,
+    "holdout_rule_top1": 0.18771468983633058,
+    "holdout_model_top1": 0.5013807503199299,
+    "holdout_model_top3": 0.7325385599784469,
+    "holdout_model_minus_rule_top1": 0.31366606048359935
+  },
+  "known_risks": [
+    "MAIN exact imitation is a proxy, not a ladder-strength proof.",
+    "The feature set is still compact and may learn shallow option priors.",
+    "Runtime adoption is intentionally deferred until dangerous buckets and guards are designed."
+  ],
+  "next_candidates": [
+    "Inspect option-type buckets where the offline model beats the rule baseline.",
+    "Improve feature extraction if holdout does not beat the rule baseline.",
+    "Only later: guarded MAIN torch runtime adoption with hard vetoes for END/ATTACK/ABILITY."
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "version": "pokemon-20260623-v0-05d6",
+  "baseline": "pokemon-20260623-v0-05d5",
+  "decision": "promote",
+  "promotion_type": "leakage_free_diagnostic_baseline",
+  "reason": "Full notebook execution passed with clean hard gates. UNKNOWN_0 policy-table fitting now excludes deterministic holdout decisions, and holdout evaluation remains nonzero with comparable correctness on hits versus v0-05d5.",
+  "hard_gates": {
+    "run_mode": "full",
+    "error_count": 0,
+    "policy_table_entries": 50,
+    "fit_split_status": "ok",
+    "fit_excluded_splits": [
+      "holdout"
+    ],
+    "fit_excluded_decisions": 2502,
+    "decision_eval_rows": 16446,
+    "split_eval_rows": 3,
+    "stress_eval_rows": 12,
+    "holdout_decisions": 2502,
+    "holdout_policy_hit_decisions": 1737,
+    "holdout_policy_hit_rate": 0.6942446043165468,
+    "holdout_policy_correct_rate_on_hits": 0.6027633851468048,
+    "submission_archives_prefixed": true,
+    "archive_required_files_present": true,
+    "archive_has_pycache": false,
+    "archive_has_pyc_or_pyo": false,
+    "archive_has_torch_name": false
+  },
+  "baseline_comparison": {
+    "v0_05d5_policy_table_entries": 59,
+    "v0_05d6_policy_table_entries": 50,
+    "v0_05d5_holdout_policy_hit_rate": 0.7773780975219824,
+    "v0_05d6_holdout_policy_hit_rate": 0.6942446043165468,
+    "v0_05d5_holdout_correct_rate_on_hits": 0.6015424164524421,
+    "v0_05d6_holdout_correct_rate_on_hits": 0.6027633851468048,
+    "v0_05d5_runtime_selected": 6,
+    "v0_05d6_runtime_selected": 8,
+    "local_confirm_win_rate": 0.9125
+  },
+  "known_risks": [
+    "This promotes a cleaner validation protocol, not proven gameplay strength.",
+    "Policy hit coverage dropped after removing holdout from table fitting.",
+    "Runtime policy hits remain sparse in local variant smoke, so direct game impact is still limited.",
+    "Local confirm win-rate is noisy against simple local opponents."
+  ],
+  "next_candidates": [
+    "Use leakage-free split evaluation to tune UNKNOWN_0 policy table thresholds on train/valid only.",
+    "Add deterministic baseline-vs-candidate local head-to-head seeds.",
+    "Investigate option-type-only policy correctness ceiling and whether same-type ambiguity limits runtime gains."
+  ]
+}

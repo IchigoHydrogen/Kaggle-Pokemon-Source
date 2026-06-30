@@ -1,0 +1,55 @@
+{
+  "version": "pokemon-20260623-v0-06d1",
+  "baseline": "pokemon-20260623-v0-05d6",
+  "decision": "promote",
+  "promotion_type": "tactical_policy_baseline",
+  "reason": "Full notebook execution passed with clean hard gates. The phase-aware tactical scoring layer is present in the final submission archive and local confirm/meta summaries improved versus v0-05d6 without illegal actions or errors.",
+  "hard_gates": {
+    "run_mode": "full",
+    "error_count": 0,
+    "local_smoke_errors": 0,
+    "local_smoke_illegal_actions": 0,
+    "local_confirm_errors": 0,
+    "local_confirm_illegal_actions": 0,
+    "local_meta_errors": 0,
+    "local_meta_illegal_actions": 0,
+    "submission_archives_prefixed": true,
+    "archive_required_files_present": true,
+    "archive_has_pycache": false,
+    "archive_has_pyc_or_pyo": false,
+    "archive_has_torch_name": false,
+    "main_py_has_tactical_card_bonus": true,
+    "main_py_imports_torch": false
+  },
+  "baseline_comparison": {
+    "v0_05d6_confirm_win_rate": 0.9125,
+    "v0_06d1_confirm_win_rate": 0.95,
+    "v0_05d6_meta_win_rate": 0.875,
+    "v0_06d1_meta_win_rate": 0.95,
+    "v0_05d6_smoke_win_rate": 1.0,
+    "v0_06d1_smoke_win_rate": 0.9375,
+    "v0_05d6_confirm_avg_steps": 93.225,
+    "v0_06d1_confirm_avg_steps": 91.8,
+    "v0_05d6_meta_avg_steps": 109.075,
+    "v0_06d1_meta_avg_steps": 100.275,
+    "v0_05d6_policy_table_entries": 50,
+    "v0_06d1_policy_table_entries": 52,
+    "v0_05d6_holdout_policy_hit_rate": 0.6942446043165468,
+    "v0_06d1_holdout_policy_hit_rate": 0.7274180655475619,
+    "v0_05d6_holdout_correct_rate_on_hits": 0.6027633851468048,
+    "v0_06d1_holdout_correct_rate_on_hits": 0.6010989010989011,
+    "v0_05d6_runtime_policy_selected": 8,
+    "v0_06d1_runtime_policy_selected": 3
+  },
+  "known_risks": [
+    "Local confirm/meta opponents are simple sanity checks and do not prove Kaggle strength.",
+    "Smoke win-rate dipped from 1.0 to 0.9375, though with no errors or illegal actions.",
+    "Runtime UNKNOWN_0 policy selections decreased, so gains appear to come from base tactical scoring, not policy-table activity.",
+    "The tactical pass changes several related scoring branches, so future work should add context-level ablations."
+  ],
+  "next_candidates": [
+    "Add deterministic baseline-vs-candidate head-to-head seeds to reduce local eval noise.",
+    "Add context-level action agreement diagnostics for TO_HAND, SWITCH, TO_BENCH, and SETUP_BENCH_POKEMON after tactical scoring.",
+    "Run a narrower ablation to determine which tactical bonuses carried the local meta improvement."
+  ]
+}

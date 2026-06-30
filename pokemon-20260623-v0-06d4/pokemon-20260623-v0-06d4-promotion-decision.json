@@ -1,0 +1,35 @@
+{
+  "decision": "promote",
+  "promotion_type": "guarded_torch_policy_path",
+  "reason": "guarded torch policy changed actions and passed local hard gates",
+  "hard_gates": {
+    "archive": "/kaggle/working/pokemon-20260623-v0-06d4-submission.tar.gz",
+    "missing_required": [],
+    "has_pycache": false,
+    "has_pyc_or_pyo": false,
+    "games": 96,
+    "errors": 0,
+    "illegal_action_count": 0,
+    "p99_latency": 0.00044615908002015175,
+    "max_latency": 0.001177104000817053,
+    "policy_available": true,
+    "policy_param_count": 329089,
+    "policy_overrides": 151,
+    "policy_eligible": 983
+  },
+  "baseline_comparison": {
+    "v0_06d3_official_note": "official Kaggle match completed in about 2 minutes",
+    "gameplay_baseline": "pokemon-20260623-v0-06d1",
+    "local_win_rate": 0.96875
+  },
+  "known_risks": [
+    "The model imitates the existing rule teacher; this validates plumbing more than final strength.",
+    "Random-agent durability is not a Kaggle-strength proof.",
+    "Overrides are restricted to single-option low-risk contexts and may be too conservative."
+  ],
+  "next_candidates": [
+    "Train on replay/log action targets instead of only self-generated teacher labels.",
+    "Add a value or outcome target for contexts where teacher imitation cannot improve policy.",
+    "Run ablations with guard thresholds and context allow-list while keeping holdout untouched."
+  ]
+}

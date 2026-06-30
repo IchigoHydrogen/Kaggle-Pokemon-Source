@@ -1,0 +1,6 @@
+sensible_fwdsim vs generic_fwdsim (same deck, ISOLATES rollout: sensible vs greedy):
+  Mega_Lucario         sensible_fwdsim_wr=0.425 (n=40)
+  Hop_Trevenant        sensible_fwdsim_wr=0.400 (n=40)
+  Archaludon_or_Other  sensible_fwdsim_wr=0.425 (n=40)
+DONE_SF
+EXIT_0

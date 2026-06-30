@@ -1,0 +1,42 @@
+{
+  "version": "pokemon-20260623-v0-06d3",
+  "baseline": "pokemon-20260623-v0-06d1",
+  "decision": "promote",
+  "promotion_type": "submit_ready_shadow_torch",
+  "reason": "Generated a prefixed submit-ready archive that imports torch, loads a packaged 329,089-parameter model, runs shadow inference every agent call, and passes local durability with zero errors and zero illegal actions.",
+  "hard_gates": {
+    "archive": "/kaggle/working/pokemon-20260623-v0-06d3-submission.tar.gz",
+    "param_count": 329089,
+    "archive_size_bytes": 2285542,
+    "archive_missing_required": [],
+    "archive_has_pycache": false,
+    "archive_has_pyc_or_pyo": false,
+    "torch_imported": true,
+    "games": 96,
+    "errors": 0,
+    "illegal_action_count": 0,
+    "import_seconds_max": 0.01783508800144773,
+    "act_latency_p99": 0.0006757005995314099,
+    "act_latency_max": 0.006010686000081478,
+    "timed_agent_calls": 5789,
+    "options_scored": 43046,
+    "overage_0_25s": 0.0,
+    "overage_1_0s": 0.0,
+    "latency_parquet_written": true
+  },
+  "baseline_comparison": {
+    "v0_06d1_behavior_preserved": "intended shadow mode",
+    "v0_06d3_torch_in_runtime": true,
+    "gameplay_claim": "none; model output does not alter actions"
+  },
+  "known_risks": [
+    "This is submit-ready but shadow-mode; it does not yet use NN output to improve decisions.",
+    "Kaggle production runtime may differ from local Docker, so remainingOverageTime fallback remains advisable before enabling a real model.",
+    "A real trained model may have more expensive feature extraction."
+  ],
+  "next_candidates": [
+    "Train a real context-specific PyTorch reranker and enable it behind confidence/timing guards.",
+    "Add remainingOverageTime-aware fallback before using neural outputs.",
+    "Benchmark a near-500k model with real features."
+  ]
+}

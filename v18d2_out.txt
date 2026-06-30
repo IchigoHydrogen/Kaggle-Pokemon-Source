@@ -1,0 +1,3 @@
+lucario_fwdsim(Lucario-aware eval) vs generic_fwdsim, Lucario: wr=0.460 (n=50)
+DONE_V18D2
+EXIT_0

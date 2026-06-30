@@ -1,0 +1,65 @@
+{
+  "version": "pokemon-20260625-v0-07d5-remote-pc",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "machine": "remote-pc",
+  "experiment_type": "conservative",
+  "consecutive_conservative_count": 1,
+  "development_track": "exploration_track",
+  "runtime_mode": "guarded_torch_policy",
+  "fresh_training": true,
+  "artifact_reuse": "v06d18 feature matrix, IL weights, decision rows (declared)",
+  "hard_gates": "pass",
+  "reason": "Full pipeline on episodes-06-24 with fixed seed completed cleanly. CRITICAL FINDING: dual eval reveals dim96 win-label leakage. Stored-feature margin=+0.0068 but inference-feature margin=-0.0009 (near-zero). v07d4 stored margin of 0.057 was inflated. True policy quality is near-zero. Research baseline must be recalibrated to inference-feature eval. All hard gates pass; smoke gate confirmed.",
+  "runtime_baseline": {
+    "holdout_model_top1": 0.509,
+    "runtime_mode": "guarded_torch_policy"
+  },
+  "research_baseline_prior": {
+    "winner_margin_stored": 0.057,
+    "note": "v07d4 stored-feature eval; now known to be inflated by dim96 leakage"
+  },
+  "winner_margin_summary": {
+    "holdout_winner_top1_stored": 0.5194,
+    "holdout_loser_top1_stored": 0.5126,
+    "holdout_winner_margin_stored": 0.0068,
+    "holdout_winner_top1_inference": 0.5194,
+    "holdout_loser_top1_inference": 0.5203,
+    "holdout_winner_margin_inference": -0.0009,
+    "il_baseline_winner_margin": -0.0037,
+    "prior_baseline_winner_margin": 0.057,
+    "improvement_vs_baseline": "negative (0.0068 stored << 0.057, -0.0009 inference < 0)"
+  },
+  "holdout_summary": {
+    "model_top1": 0.5194
+  },
+  "runtime_summary": {
+    "smoke_gate_ok": true,
+    "loader_entrypoint_ok": true,
+    "torch_load_ok": true,
+    "action_changes": 455,
+    "illegal_actions": 0,
+    "exceptions": 0,
+    "latency_p99_ms": 0.37,
+    "archive_path": "pokemon-20260625-v0-07d5-remote-pc-submission.tar.gz"
+  },
+  "training_summary": {
+    "rl_iters": 30,
+    "games_per_iter": 200,
+    "elapsed_min": 31.3,
+    "pre_rl_win_rate": 0.59,
+    "post_rl_win_rate": 0.26,
+    "win_rate_collapse_note": "win_rate dropped 0.59->0.26 during training, likely IL anchor (lambda_il=1.0) suppressing RL signal"
+  },
+  "exploration_summary": "CRITICAL FINDING — dim96 leakage quantified. dim96 is set to 1.0 for winners and 0.0 for losers in the stored training features. At inference, dim96=1.0 for all decisions. Stored-feature eval preserves this leakage (inflated margin). Inference-feature eval removes it (true margin). Result: stored=+0.0068, inference=-0.0009. All prior v07d2-v07d4 stored margins (0.034, 0.008, 0.057) were inflated. True policy advantage over IL is near-zero. Inference-feature eval is now the authoritative primary metric going forward.",
+  "known_risks": [
+    "win_rate collapse 0.59->0.26: IL anchor too strong (lambda_il=1.0). RL may not be learning to win.",
+    "inference-feature margin near-zero suggests minimal true winner-selective learning so far."
+  ],
+  "next_candidates": [
+    "[aggressive] v07d6: REINFORCE with moving-average baseline replacing PPO. Larger gradient updates, no clip. Also reduce lambda_il to 0.5 to let RL dominate. Primary metric: inference-feature winner_margin.",
+    "[conservative] v07d7: offline PPO on large episode buffer (collect from v07d5 or fresh) with inference-feature eval as primary metric. Re-establish calibrated baseline.",
+    "[conservative] v07d8: reduce lambda_il from 1.0 to 0.1 in online RL, monitor win_rate recovery.",
+    "[aggressive] v07d9: remove dim96 entirely from feature vector; retrain IL from scratch on cleaned features."
+  ]
+}

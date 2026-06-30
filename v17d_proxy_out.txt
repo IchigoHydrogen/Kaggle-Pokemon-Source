@@ -1,0 +1,14 @@
+Kaggle order: champion1023 > exguard941 > MC10 937 > deckout896 > v13d4 720
+league N=20/deck/agent
+  champion(1023)   league_wr=0.867  | {'Mega_Lucario': 0.9, 'Hop_Trevenant': 0.7, 'Archaludon_or_Other': 1.0}
+  exguard(941)     league_wr=0.800  | {'Mega_Lucario': 0.8, 'Hop_Trevenant': 0.65, 'Archaludon_or_Other': 0.95}
+  MC10(937)        league_wr=0.767  | {'Mega_Lucario': 0.8, 'Hop_Trevenant': 0.5, 'Archaludon_or_Other': 1.0}
+  deckout(896)     league_wr=0.883  | {'Mega_Lucario': 0.85, 'Hop_Trevenant': 0.8, 'Archaludon_or_Other': 1.0}
+  v13d4(720)       league_wr=0.750  | {'Mega_Lucario': 0.8, 'Hop_Trevenant': 0.45, 'Archaludon_or_Other': 1.0}
+--- league ranking (high=better) ---
+  0.883 deckout(896)
+  0.867 champion(1023)
+  0.800 exguard(941)
+  0.767 MC10(937)
+  0.750 v13d4(720)
+DONE_EXIT_0

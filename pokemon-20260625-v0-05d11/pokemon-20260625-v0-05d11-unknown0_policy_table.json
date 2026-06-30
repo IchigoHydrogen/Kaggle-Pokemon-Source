@@ -1,0 +1,7 @@
+{
+  "END|N1||safe||ko||early": "END",
+  "END|N1||safe||ko||mid": "END",
+  "END|N1|YES||safe||ko||early": "YES",
+  "END|N1|YES||safe||ko||mid": "END",
+  "END|N3p||safe||ko||mid": "END"
+}

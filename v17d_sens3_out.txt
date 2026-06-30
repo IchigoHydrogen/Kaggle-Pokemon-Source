@@ -1,0 +1,6 @@
+sensible_agent vs generic_fwdsim, same deck (deck-agnostic strength check):
+  Mega_Lucario         sensible_wr=0.375 (n=40)
+  Hop_Trevenant        sensible_wr=0.325 (n=40)
+  Archaludon_or_Other  sensible_wr=0.250 (n=40)
+DONE_SENS3
+EXIT_0

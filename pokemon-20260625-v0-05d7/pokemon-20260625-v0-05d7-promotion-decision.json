@@ -1,0 +1,70 @@
+{
+  "version": "pokemon-20260625-v0-05d7",
+  "decision": "exploration_promote",
+  "promotion_type": "exploration_promote",
+  "machine": "ei",
+  "experiment_type": "conservative",
+  "consecutive_conservative_count": 1,
+  "development_track": "exploration_track",
+  "runtime_mode": "rule_only / table_or_numpy_policy",
+  "fresh_training": true,
+  "artifact_reuse": "none",
+  "hard_gates": "pass",
+  "hard_gate_detail": {
+    "notebook_executed": true,
+    "main_py_compiles": true,
+    "archive_has_pycache": false,
+    "archive_has_pyc_pyo": false,
+    "archive_has_torch": false,
+    "archive_required_files": true,
+    "artifacts_prefixed": true,
+    "error_count": 0,
+    "policy_table_entries": 46,
+    "fit_excluded_splits": ["holdout"]
+  },
+  "data_summary": {
+    "episode_source": "pokemon-tcg-ai-battle-episodes-2026-06-24",
+    "top200_source": "top200-20260624-ranking",
+    "episode_files": 5516,
+    "decision_rows": 1517447,
+    "split_counts": {"holdout": 844, "train": 3840, "valid": 832}
+  },
+  "winner_margin_summary": {
+    "scope": "UNKNOWN_0 holdout policy_hit=True",
+    "winner_top1": 0.635,
+    "loser_top1": 0.554,
+    "winner_margin": 0.081,
+    "n_winner": 798,
+    "n_loser": 718,
+    "low_confidence": false,
+    "baseline_winner_margin": null,
+    "note": "v0-05d 系統初計測。正の winner_margin (0.081) を確認。"
+  },
+  "holdout_summary": {
+    "policy_hit_rate": 0.658,
+    "correct_rate_on_hits": 0.597,
+    "baseline_hit_rate": 0.694,
+    "baseline_correct_rate": 0.603,
+    "delta_hit_rate": -0.036,
+    "delta_correct_rate": -0.006,
+    "note": "hit_rate は v0-05d6 比 -3.6pp だが correct_rate はほぼ同等 (-0.6pp)。success_criteria (>=0.55) 満たす。"
+  },
+  "exploration_evidence": {
+    "data_refresh_confirmed": true,
+    "winner_margin_measured_first_time": true,
+    "winner_margin_positive": true,
+    "policy_quality_maintained": true,
+    "new_episode_count_note": "06-24 で 5516 ファイル (06-22 の 5062 より増加)。追加のエピソードが取り込まれた可能性あり。"
+  },
+  "known_risks": [
+    "hit_rate が -3.6pp 低下。policy_table_entries 46 (vs 50) — 06-24 データで一部 signature の coverage が変化。",
+    "winner_margin は UNKNOWN_0 ヒット決定のみ。全決定に対する winner_margin は未計測。",
+    "episode_files=5516 は 06-24 単独 (4596 files) より多い。06-22 or working dir のファイルを一部拾っている可能性あり。"
+  ],
+  "next_candidates": [
+    "v0-05d8-a: EPISODE_ROOT を 06-24 に厳格に限定 (glob pattern を *.json に限定し余計なファイルを除外) して episode 数を確認",
+    "v0-05d8-b: 06-22 + 06-24 を統合して policy table を再フィット (coverage 向上を狙う)",
+    "v0-05d8-c: 全決定 (UNKNOWN_0 以外も含む) に対して winner_margin を計測する",
+    "v0-05d8-d: policy table の margin_threshold チューニング (train/valid 上で最適化)"
+  ]
+}
