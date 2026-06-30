@@ -1,0 +1,3 @@
+v62-Lucario vs champion(Alakazam 1023): v62_wr=0.500 (n=50) [non-predictive of Kaggle field, characterizes matchup]
+DONE_V62CHAMP
+EXIT_0
